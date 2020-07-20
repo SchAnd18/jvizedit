@@ -44,13 +44,13 @@ public class ControlStateMachine {
 		final int index = currentState.handleEvent(event); //TODO: return a structure, not an index
 		if(index >= 0) {
 			final ControlState newState = currentState.getState(index);
-			final IControlStateTransition<?> transition = currentState.getTransition(index);
+			final IControlStateEventHandler<?> transition = currentState.getTransition(index);
 			currentState = newState;
 			notifyUpdate(oldState, transition, event);
 		}
 	}
 	
-	private void notifyUpdate(final ControlState oldState, final IControlStateTransition<?> transition, final Object event) {
+	private void notifyUpdate(final ControlState oldState, final IControlStateEventHandler<?> transition, final Object event) {
 		for(final IControlStateUpdateListener listener: listeners) {
 			listener.controlStateChanged(oldState, currentState, transition, event);
 		}
@@ -67,7 +67,7 @@ public class ControlStateMachine {
 	
 	public static interface IControlStateUpdateListener {
 		
-		public void controlStateChanged(final ControlState oldState, final ControlState newState, final IControlStateTransition<?> transition, final Object event);
+		public void controlStateChanged(final ControlState oldState, final ControlState newState, final IControlStateEventHandler<?> transition, final Object event);
 		
 	}
 	

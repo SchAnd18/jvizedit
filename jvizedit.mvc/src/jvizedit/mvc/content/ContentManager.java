@@ -98,7 +98,6 @@ public class ContentManager implements IContentManager {
 		final ContentChange cc = cu.update(invalidatedControllers, this);
 		
 		for(IController o: cc.getRemovedControllers()) {
-			//TODO: instead of removing controller by model (key), remove directrly controller because model might not be set anymore 
 			modelControllerMap.remove(o.getModel());
 		}	
 		

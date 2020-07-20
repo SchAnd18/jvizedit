@@ -5,7 +5,7 @@ import java.util.List;
 
 public class ControlState {
 
-	private final List<IControlStateTransition<?>> transitions = new ArrayList<>();
+	private final List<IControlStateEventHandler<?>> transitions = new ArrayList<>();
 	private final List<ControlState> targetStates = new ArrayList<>();
 	private final String stateName;
 	
@@ -17,14 +17,14 @@ public class ControlState {
 		return stateName;
 	}
 	
-	public void addStateTransition(ControlState targetState, final IControlStateTransition<?> stateTransition) {
+	public void addStateTransition(ControlState targetState, final IControlStateEventHandler<?> stateTransition) {
 		transitions.add(0, stateTransition);
 		targetStates.add(0, targetState);
 	}
 	
 	public int handleEvent(Object event) {
 		for(int i = 0; i<transitions.size(); i++) {
-			final IControlStateTransition<?> transition = transitions.get(i);
+			final IControlStateEventHandler<?> transition = transitions.get(i);
 			final ControlState targetState = targetStates.get(i);
 			
 			final boolean match = tryHandleEvent(targetState, transition, event);
@@ -35,7 +35,7 @@ public class ControlState {
 		return -1;
 	}
 	
-	private <T> boolean tryHandleEvent(final ControlState targetState, final IControlStateTransition<T> transition, final Object event) {
+	private <T> boolean tryHandleEvent(final ControlState targetState, final IControlStateEventHandler<T> transition, final Object event) {
 		final Class<T> expectedEventType = transition.getExpectedEventType();
 		if(!expectedEventType.isInstance(event)) {
 			return false;
@@ -45,7 +45,7 @@ public class ControlState {
 		return result;
 	}
 	
-	public IControlStateTransition<?> getTransition(int index) {
+	public IControlStateEventHandler<?> getTransition(int index) {
 		return transitions.get(index);
 	}
 	

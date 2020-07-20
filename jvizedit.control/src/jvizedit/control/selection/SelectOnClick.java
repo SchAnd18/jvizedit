@@ -5,11 +5,11 @@ import java.util.List;
 
 import jvizedit.control.core.ControlState;
 import jvizedit.control.core.ControlStateMachine;
-import jvizedit.control.core.IControlStateTransition;
+import jvizedit.control.core.IControlStateEventHandler;
 import jvizedit.control.core.events.IMouseEvent;
 import jvizedit.control.core.events.IMouseEvent.MouseButton;
 
-public class SelectOnClick implements IControlStateTransition<IMouseEvent> {
+public class SelectOnClick implements IControlStateEventHandler<IMouseEvent> {
 	
 	public static final String STATE_LEFT_MOUSE_DOWN_ON_SELECTABLE = "LeftMouseDownOnSelectable";
 	public static final String STATE_LEFT_MOUSE_DOWN = "LeftMouseDown";
@@ -104,7 +104,6 @@ public class SelectOnClick implements IControlStateTransition<IMouseEvent> {
 	
 	
 	public interface ISelectOnClickListener {
-		//TODO: Add mouse events with coordinates here
 		
 		void updateSelection(IMouseEvent mouseEvent, ISelectableController controller, SelectionUpdate update);
 		

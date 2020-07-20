@@ -12,7 +12,6 @@ import jvizedit.control.selection.SelectionAreaOnDrag.ESelectionAreaEvent;
 import jvizedit.control.selection.SelectionAreaOnDrag.ISelectionAreaListener;
 import jvizedit.control.selection.ViewerSelection.ViewerSelectionUpdate;
 
-//TODO: create selection update mode, Auto closeable?
 public class ViewerSelectionUpdater implements ISelectionAreaListener, ISelectOnClickListener {
 
 	private final ViewerSelection viewerSelection;

@@ -18,12 +18,6 @@ public interface IController extends IControllerBase {
 	//TODO: remove this method
 	void relocateToNewParent(IController newParent);
 	
-//	void addConnectedEdge(IEdgeController edge);
-//	
-//	void removeConnectedEdge(IEdgeController edge);
-//	
-//	Collection<IEdgeController> getConnectedEdges();
-	
 	
 	default Collection<IController> getControllerChildren() {
 		final IContentHandler<IController> ch = getConentHandler();

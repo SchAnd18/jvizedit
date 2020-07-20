@@ -3,12 +3,12 @@ package jvizedit.control;
 
 import jvizedit.control.core.ControlState;
 import jvizedit.control.core.ControlStateMachine;
-import jvizedit.control.core.IControlStateTransition;
+import jvizedit.control.core.IControlStateEventHandler;
 import jvizedit.control.core.events.IMouseEvent;
 import jvizedit.control.core.events.IMouseEvent.MouseButton;
 import jvizedit.control.core.events.Point2D;
 
-public class DragDiagram implements IControlStateTransition<IMouseEvent> {
+public class DragDiagram implements IControlStateEventHandler<IMouseEvent> {
 
 	public static final String STATE_DRAG_DIAGRAM = "DragDiagram";
 	
@@ -16,11 +16,11 @@ public class DragDiagram implements IControlStateTransition<IMouseEvent> {
 	private final ControlState dragDiagram;
 	private final ControlState rightMouseDown;
 	
-	private final IModelLayer modelLayer;
+	private final INavigableArea modelLayer;
 	private Point2D mouseStartPos;
 	private Point2D rootStartPos;
 	
-	public DragDiagram(final ControlStateMachine cstm, final OpenContextMenu ocm, final IModelLayer modelLayer) {
+	public DragDiagram(final ControlStateMachine cstm, final OpenContextMenu ocm, final INavigableArea modelLayer) {
 		this.rightMouseDown = ocm.getRightMouseDownState();
 		this.dragDiagram = cstm.getOrCreateState(STATE_DRAG_DIAGRAM);
 		this.init = cstm.getInitState();

@@ -3,15 +3,15 @@ package jvizedit.control;
 
 import jvizedit.control.core.ControlState;
 import jvizedit.control.core.ControlStateMachine;
-import jvizedit.control.core.IControlStateTransition;
+import jvizedit.control.core.IControlStateEventHandler;
 import jvizedit.control.core.events.IMouseWheelEvent;
 
-public class Zoom implements IControlStateTransition<IMouseWheelEvent> {
+public class Zoom implements IControlStateEventHandler<IMouseWheelEvent> {
 	
-	private final IModelLayer modelLayer;
+	private final INavigableArea modelLayer;
 	private final ControlState initState;
 	
-	public Zoom(final ControlStateMachine cstm, final IModelLayer modelLayer) {
+	public Zoom(final ControlStateMachine cstm, final INavigableArea modelLayer) {
 		initState = cstm.getInitState();
 		initState.addStateTransition(initState, this);
 		this.modelLayer = modelLayer;

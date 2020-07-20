@@ -5,7 +5,6 @@ import java.util.Collection;
 import jvizedit.control.core.events.IMouseEvent;
 
 
-// TODO: check if an default implementation of this is possible when there is an interface that does the coordinate calculations
 public interface ISelectableFinder {
 
 	ISelectableController findControllerAt(double x, double y, IMouseEvent event);

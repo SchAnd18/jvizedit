@@ -6,7 +6,7 @@ import java.util.List;
 import jvizedit.control.core.ControlState;
 import jvizedit.control.core.ControlStateMachine;
 import jvizedit.control.core.ControlStateMachine.IControlStateUpdateListener;
-import jvizedit.control.core.IControlStateTransition;
+import jvizedit.control.core.IControlStateEventHandler;
 import jvizedit.control.core.events.IKeyEvent;
 import jvizedit.control.core.events.IKeyEvent.Key;
 import jvizedit.control.core.events.IMouseEvent.MouseButton;
@@ -45,7 +45,7 @@ public class SelectionAreaOnDrag implements IControlStateUpdateListener {
 	}
 	
 	
-	private final IControlStateTransition<IKeyEvent> abortDrag = new IControlStateTransition<IKeyEvent>() {
+	private final IControlStateEventHandler<IKeyEvent> abortDrag = new IControlStateEventHandler<IKeyEvent>() {
 		public boolean handleInputEvent(ControlState srcState, ControlState targetState, IKeyEvent event) {
 			final boolean escUp = event.isKeyReleased() && event.getKey() == Key.ESCAPE;
 			if (srcState == selectionArea && targetState == init && escUp) {
@@ -61,7 +61,7 @@ public class SelectionAreaOnDrag implements IControlStateUpdateListener {
 		}
 	};
 	
-	private final IControlStateTransition<IMouseEvent> performDrag = new IControlStateTransition<IMouseEvent>() {
+	private final IControlStateEventHandler<IMouseEvent> performDrag = new IControlStateEventHandler<IMouseEvent>() {
 		
 		@Override
 		public boolean handleInputEvent(final ControlState srcState, final ControlState targetState, final IMouseEvent event) {
@@ -113,7 +113,7 @@ public class SelectionAreaOnDrag implements IControlStateUpdateListener {
 	
 
 	@Override
-	public void controlStateChanged(ControlState oldState, ControlState newState, IControlStateTransition<?> transition,Object event) {
+	public void controlStateChanged(ControlState oldState, ControlState newState, IControlStateEventHandler<?> transition,Object event) {
 		if(newState == mouseDown && event instanceof IMouseEvent) {
 			final IMouseEvent me = (IMouseEvent)event;
 			selectionAreaStart = new Point2D(me.getX(), me.getY());

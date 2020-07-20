@@ -1,7 +1,6 @@
 package jvizedit.control.core;
 
-//TODO: find another name for this. E.g. IControlStateMachineExtension
-public interface IControlStateTransition<T> {
+public interface IControlStateEventHandler<T> {
 	
 	boolean handleInputEvent(ControlState srcState, ControlState targetState, T event);
 	

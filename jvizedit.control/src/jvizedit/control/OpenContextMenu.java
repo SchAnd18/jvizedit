@@ -5,11 +5,11 @@ import java.util.List;
 
 import jvizedit.control.core.ControlState;
 import jvizedit.control.core.ControlStateMachine;
-import jvizedit.control.core.IControlStateTransition;
+import jvizedit.control.core.IControlStateEventHandler;
 import jvizedit.control.core.events.IMouseEvent;
 import jvizedit.control.core.events.IMouseEvent.MouseButton;
 
-public class OpenContextMenu implements IControlStateTransition<IMouseEvent> {
+public class OpenContextMenu implements IControlStateEventHandler<IMouseEvent> {
 
 	public static final String STATE_RIGHT_MOUSE_DOWN = "RightMouseDown";
 	
