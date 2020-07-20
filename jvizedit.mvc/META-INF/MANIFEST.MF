@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: JVizEdit MVC
+Bundle-SymbolicName: jvizedit.mvc
+Bundle-Version: 1.0.0.qualifier
+Automatic-Module-Name: jvizedit.mvc
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Export-Package: jvizedit.mvc,
+ jvizedit.mvc.content,
+ jvizedit.mvc.content.core
