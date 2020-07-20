@@ -8,10 +8,6 @@ public interface ISelectableController extends IControllerBase {
 		return true;
 	}
 	
-	default boolean hasSelectionBorder() {
-		return true;
-	}
-	
 	default void setSelectionStatus(boolean isSelected) {
 	}
 }

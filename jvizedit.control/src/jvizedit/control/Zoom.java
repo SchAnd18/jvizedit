@@ -34,7 +34,7 @@ public class Zoom implements IControlStateEventHandler<IMouseWheelEvent> {
 	private void zoom(final IMouseWheelEvent mouseWheelEvent) {
 		
 		final double scale = modelLayer.getScale();
-		final double factor = mouseWheelEvent.wheelFactor();
+		final double factor = 1d + mouseWheelEvent.wheelCount();
 		
 		double newScale = Math.max(scale * factor, 0.0005);
 		newScale = Math.min(newScale, 1000);

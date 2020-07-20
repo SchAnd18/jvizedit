@@ -1,11 +1,28 @@
 package jvizedit.swtfx.events;
 
 
+import javafx.event.Event;
+import javafx.event.EventHandler;
+import javafx.event.EventType;
+import javafx.scene.Scene;
 import javafx.scene.input.MouseEvent;
+import jvizedit.control.core.ControlStateMachine;
 import jvizedit.control.core.events.IMouseEvent;
 
 public class FxMouseEvent implements IMouseEvent {
 
+	public static EventHandler<Event> addMouseEventFilter(final Scene scene, final ControlStateMachine cstm) {
+		final EventHandler<Event> handler = event -> {
+			if(event instanceof MouseEvent) {
+				final MouseEvent mouseEvent = (MouseEvent)event;
+				final FxMouseEvent fxKeyEvent = new FxMouseEvent(mouseEvent);
+				cstm.handleEvent(fxKeyEvent);
+			}
+		};
+		scene.addEventFilter(EventType.ROOT, handler);
+		return handler;
+	}
+	
 	private final MouseEvent wrappedMouseEvent;
 	
 	public FxMouseEvent(final MouseEvent wrappedMouseEvent) {

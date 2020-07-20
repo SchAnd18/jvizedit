@@ -146,6 +146,7 @@ public class ViewerSelection implements IContentChangeListener {
 			currentUpdate = null;
 			if(clearSelection) {
 				removeFromSelection.addAll(selectedObjects);
+				removeFromSelection.removeAll(addToSelection); //an object to add could be in the list
 			}
 			addToSelection.forEach(o -> {
 				final boolean added = selectedObjects.add(o);

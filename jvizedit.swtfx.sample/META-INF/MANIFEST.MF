@@ -1,0 +1,11 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Sample
+Bundle-SymbolicName: jvizedit.swtfx.sample
+Bundle-Version: 1.0.0.qualifier
+Automatic-Module-Name: jvizedit.swtfx.sample
+Bundle-RequiredExecutionEnvironment: JavaSE-11
+Require-Bundle: jvizedit.control,
+ jvizedit.mvc,
+ jvizedit.swtfx,
+ org.eclipse.swt

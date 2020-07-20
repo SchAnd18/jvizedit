@@ -17,7 +17,7 @@ public class SwtMouseWheelEvent implements IMouseWheelEvent {
 	}
 	
 	@Override
-	public double wheelFactor() {
+	public double wheelCount() {
 		return swtEvent.count / 20d;
 	}
 
