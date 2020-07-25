@@ -4,7 +4,7 @@ Bundle-Name: Sample
 Bundle-SymbolicName: jvizedit.swtfx.sample
 Bundle-Version: 1.0.0.qualifier
 Automatic-Module-Name: jvizedit.swtfx.sample
-Bundle-RequiredExecutionEnvironment: JavaSE-11
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Require-Bundle: jvizedit.control,
  jvizedit.mvc,
  jvizedit.swtfx,

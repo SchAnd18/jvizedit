@@ -4,7 +4,7 @@ Bundle-Name: Swtfx
 Bundle-SymbolicName: jvizedit.swtfx
 Bundle-Version: 1.0.0.qualifier
 Automatic-Module-Name: jvizedit.swtfx
-Bundle-RequiredExecutionEnvironment: JavaSE-11
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Require-Bundle: jvizedit.control,
  jvizedit.mvc,
  org.eclipse.swt

@@ -1,6 +1,7 @@
 package jvizedit.swtfx.sample.viewer;
 
-import org.eclipse.swt.SWT;
+import org.eclipse.swt.SWT;import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.events.MouseWheelListener;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
@@ -39,6 +40,8 @@ public class ShapeViewerControl {
 		
 		this.fxCanvas = new FXCanvas(parent, SWT.NONE);
 		
+		
+		
 		final FxRootControl fxRoot = new FxRootControl();
 		final Scene scene = fxRoot.getScene();
 		
@@ -68,8 +71,9 @@ public class ShapeViewerControl {
 			
 			
 			final OpenContextMenu openContextMenu = new OpenContextMenu(cstm);
-			new DragDiagram(cstm, openContextMenu, fxRoot);
+			openContextMenu.addOpenContextMenuListener(new ContextMenu(fxCanvas));
 			
+			new DragDiagram(cstm, openContextMenu, fxRoot);
 			
 			new Zoom(cstm, fxRoot);
 			
