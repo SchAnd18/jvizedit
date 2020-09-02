@@ -1,4 +1,4 @@
-package jvizedit.control;
+package jvizedit.control.dragdrop;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,6 +10,7 @@ import jvizedit.control.core.events.IKeyEvent;
 import jvizedit.control.core.events.IKeyEvent.Key;
 import jvizedit.control.core.events.IMouseEvent;
 import jvizedit.control.core.events.IMouseEvent.MouseButton;
+import jvizedit.control.core.events.IWrappedEvent;
 import jvizedit.control.selection.ISelectableController;
 import jvizedit.control.selection.ISelectableFinder;
 import jvizedit.control.selection.SelectOnClick;
@@ -29,6 +30,7 @@ public class DragSelection {
 	
 	private final SelectOnClick selectOnClick;
 	
+	private boolean isPseudoTransferAccepted;
 	private ISelectableController currentSource;
 	private double currentMouseX;
 	private double currentMouseY;
@@ -48,6 +50,14 @@ public class DragSelection {
 		this.selectableFinder = selectableFinder;
 	}
 	
+	protected void acceptPseudoTransfer() {
+		this.isPseudoTransferAccepted = true;
+	}
+	
+	protected boolean isPseudoTransferAccepted() {
+		return isPseudoTransferAccepted;
+	}
+	
 	public ControlState getDragSelection() {
 		return dragSelection;
 	}
@@ -64,7 +74,7 @@ public class DragSelection {
 		public boolean handleInputEvent(ControlState srcState, ControlState targetState, IKeyEvent event) {
 			final boolean escUp = event.isKeyReleased() && event.getKey() == Key.ESCAPE;
 			if (srcState == dragSelection && escUp) {
-				notifyListeners(EDragDropEventType.abortDrag, currentMouseX, currentMouseY);
+				notifyListeners(event,EDiagramDragEventType.abortDrag, currentMouseX, currentMouseY);
 				return true;
 			}
 			return false;
@@ -86,22 +96,27 @@ public class DragSelection {
 			currentMouseX = x;
 			currentMouseY = y;
 			
-			EDragDropEventType eventType = null;
+			EDiagramDragEventType eventType = null;
 			if (srcState == mouseDownState && targetState == dragSelection && isDragEvent) {
 				final SelectionUpdate update = event.isControlDown() ? SelectionUpdate.TOGGLE : SelectionUpdate.SET_IF_NOT_SELECTED;
 				selectOnClick.updateSelection(event, srcState, update);
 				currentSource = selectableFinder.findControllerAt(x, y, event);
-				eventType = EDragDropEventType.startDrag;
+				eventType = EDiagramDragEventType.startDrag;
+				isPseudoTransferAccepted = false;
 			}
 			else if (srcState == dragSelection && targetState == dragSelection && isDragEvent) {
-				eventType = EDragDropEventType.continueDrag;
+				eventType = EDiagramDragEventType.continueDrag;
 			}
 			else if (srcState == dragSelection && targetState == init && isMouseUp) {
-				eventType = EDragDropEventType.drop;
+				if(isPseudoTransferAccepted) {					
+					eventType = EDiagramDragEventType.drop;
+				} else {
+					eventType = EDiagramDragEventType.abortDrag;
+				}
 			}
 			
 			if(eventType != null) {
-				notifyListeners(eventType,x,y);
+				notifyListeners(event, eventType, x, y);
 				return true;
 			} else {
 				return false;
@@ -115,22 +130,10 @@ public class DragSelection {
 	};
 
 
-	private void notifyListeners(final EDragDropEventType type, final double x, final double y ) {
+	private void notifyListeners(final IWrappedEvent srcEvent, final EDiagramDragEventType type, final double x, final double y ) {
+		final PseudoDragEventInfo dragEventInfo = new PseudoDragEventInfo(this, srcEvent, type, x, y, currentSource);
 		for(IDragDropListener l: this.listeners) {
-			l.dragEvent(type, x, y, currentSource);
+			l.dragEvent(dragEventInfo);
 		}
-	}
-	
-	public interface IDragDropListener {
-		
-		void dragEvent(EDragDropEventType type, double x, double y, ISelectableController dragSource);
-		
-	}
-	
-	public static enum EDragDropEventType {
-		startDrag,
-		continueDrag,
-		drop,
-		abortDrag
 	}
 }

@@ -3,9 +3,9 @@ package jvizedit.swtfx.sample.control;
 import java.util.Set;
 
 import javafx.geometry.Point2D;
-import jvizedit.control.DragSelection.EDragDropEventType;
-import jvizedit.control.DragSelection.IDragDropListener;
-import jvizedit.control.selection.ISelectableController;
+import jvizedit.control.dragdrop.EDragDropTransfer;
+import jvizedit.control.dragdrop.IDragDropListener;
+import jvizedit.control.dragdrop.IDragEventInfo;
 import jvizedit.control.selection.ViewerSelection;
 import jvizedit.mvc.content.core.IContentManager;
 import jvizedit.swtfx.sample.model.ShapeObject;
@@ -26,8 +26,10 @@ public class DragShapeObjects implements IDragDropListener {
 	}
 	
 	@Override
-	public void dragEvent(EDragDropEventType type, double x, double y, ISelectableController dragSource) {
-		switch(type) {
+	public void dragEvent(IDragEventInfo info) {
+		final double x = info.getX();
+		final double y = info.getY();
+		switch(info.getType()) {
 		case startDrag:
 			/*
 			 * Remember start position of drag and the elements that shall be dragged
@@ -45,6 +47,9 @@ public class DragShapeObjects implements IDragDropListener {
 				o.getDragPreviewTranslate().setX(p.getX());
 				o.getDragPreviewTranslate().setY(p.getY());
 			});
+			
+			//elements are expected to move with pseudo drag and drop. This is the only kind of transfer we allow. 
+			info.setAcceptedTransfers(EDragDropTransfer.pseudo); 
 			break;
 		case drop:
 			/*

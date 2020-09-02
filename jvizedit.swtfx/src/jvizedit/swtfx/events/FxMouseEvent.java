@@ -18,6 +18,7 @@ public class FxMouseEvent implements IMouseEvent {
 				final FxMouseEvent fxKeyEvent = new FxMouseEvent(mouseEvent);
 				cstm.handleEvent(fxKeyEvent);
 			}
+			
 		};
 		scene.addEventFilter(EventType.ROOT, handler);
 		return handler;
@@ -29,7 +30,8 @@ public class FxMouseEvent implements IMouseEvent {
 		this.wrappedMouseEvent = wrappedMouseEvent;
 	}
 	
-	public MouseEvent getWrappedMouseEvent() {
+	@Override
+	public MouseEvent getRealEvent() {
 		return wrappedMouseEvent;
 	}
 	

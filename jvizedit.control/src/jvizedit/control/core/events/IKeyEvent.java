@@ -1,6 +1,6 @@
 package jvizedit.control.core.events;
 
-public interface IKeyEvent {
+public interface IKeyEvent extends IWrappedEvent {
 
 	boolean isKeyReleased();
 	

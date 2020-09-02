@@ -1,6 +1,6 @@
 package jvizedit.control.core.events;
 
-public interface IMouseEvent {
+public interface IMouseEvent extends IWrappedEvent {
 
 	boolean isDrag();
 	

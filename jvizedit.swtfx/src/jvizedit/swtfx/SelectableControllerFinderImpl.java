@@ -41,7 +41,7 @@ public class SelectableControllerFinderImpl implements ISelectableFinder {
 			throw new IllegalArgumentException("Unexpected mouse event implementation!");
 		}
 		final FxMouseEvent fxMouseDown = (FxMouseEvent)mouseDown;
-		IController controller = findController(fxMouseDown.getWrappedMouseEvent());
+		IController controller = findController(fxMouseDown.getRealEvent());
 		while(controller != null) {
 			if(isSelectable(controller)) { 
 				return (ISelectableController)controller;

@@ -2,6 +2,8 @@ package jvizedit.swtfx.sample;
 
 import java.util.Random;
 
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
@@ -20,8 +22,12 @@ public class SampleApplication {
 		final Shell shell = new Shell(display);
 		shell.setLayout(new FillLayout());
 		
-		final ShapeViewerControl svc = new ShapeViewerControl(shell);
+		final SashForm sf = new SashForm(shell, SWT.HORIZONTAL);
+		
+		final ShapeViewerControl svc = new ShapeViewerControl(sf);
 		svc.setInput(createInitModel());
+		
+		new SwtShapeList(sf);
 		
 		shell.setVisible(true);
 		

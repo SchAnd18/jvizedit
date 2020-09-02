@@ -1,7 +1,6 @@
 package jvizedit.swtfx.sample.viewer;
 
-import org.eclipse.swt.SWT;import org.eclipse.swt.events.MouseEvent;
-import org.eclipse.swt.events.MouseWheelListener;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
@@ -9,10 +8,11 @@ import org.eclipse.swt.widgets.Listener;
 import javafx.embed.swt.FXCanvas;
 import javafx.scene.Scene;
 import jvizedit.control.DragDiagram;
-import jvizedit.control.DragSelection;
 import jvizedit.control.OpenContextMenu;
 import jvizedit.control.Zoom;
 import jvizedit.control.core.ControlStateMachine;
+import jvizedit.control.dragdrop.DragExternal;
+import jvizedit.control.dragdrop.DragSelection;
 import jvizedit.control.selection.ISelectableFinder;
 import jvizedit.control.selection.SelectOnClick;
 import jvizedit.control.selection.SelectionAreaOnDrag;
@@ -22,10 +22,12 @@ import jvizedit.mvc.content.ContentManager;
 import jvizedit.mvc.content.core.IContentManager;
 import jvizedit.swtfx.SelectableControllerFinderImpl;
 import jvizedit.swtfx.SelectionAreaEffect;
+import jvizedit.swtfx.events.FxDragEvent;
 import jvizedit.swtfx.events.FxKeyEvent;
 import jvizedit.swtfx.events.FxMouseEvent;
 import jvizedit.swtfx.events.SwtMouseWheelEvent;
 import jvizedit.swtfx.sample.control.DragShapeObjects;
+import jvizedit.swtfx.sample.control.DragShapeTypes;
 import jvizedit.swtfx.sample.model.ShapesRoot;
 import jvizedit.swtfx.sample.mvc.ShapeModelControllerFactory;
 
@@ -57,6 +59,7 @@ public class ShapeViewerControl {
 		{ //control state machine
 			final ControlStateMachine cstm = new ControlStateMachine();
 			
+			FxDragEvent.addDragEventFilter(scene, cstm);
 			FxMouseEvent.addMouseEventFilter(scene, cstm);
 			FxKeyEvent.addKeyEventFilter(scene, cstm);
 			
@@ -83,8 +86,12 @@ public class ShapeViewerControl {
 			this.viewerSelection = new ViewerSelection(modelContent);
 			final ViewerSelectionUpdater selectionUpdater = new ViewerSelectionUpdater(viewerSelection, selectableFinder);
 			selectOnClick.addSelectOnClickListener(selectionUpdater);
-			
+
+			//allow pseudo drag and drop of diagram elements
 			final DragSelection dragSelection = new DragSelection(cstm, selectOnClick, selectableFinder);
+			
+			//handle real drag elements form outside of diagram
+			final DragExternal dragExternal = new DragExternal(cstm);
 			
 			final SelectionAreaOnDrag selectionAreaOnDrag = new SelectionAreaOnDrag(cstm, selectOnClick);
 			final SelectionAreaEffect selecationAreaEffect = new SelectionAreaEffect(fxRoot.getFeedbackLayer(), parent.getDisplay());
@@ -94,6 +101,11 @@ public class ShapeViewerControl {
 			//apply drag behavior to shape objects
 			final DragShapeObjects dragShapeObjects = new DragShapeObjects(viewerSelection, modelContent);
 			dragSelection.addDragDropListener(dragShapeObjects);
+			
+			//apply creation of shapes by dragged types
+			final DragShapeTypes dragShapeTypes = new DragShapeTypes(modelContent);
+			dragExternal.addDragDropListener(dragShapeTypes);
+			
 		}
 	}
 

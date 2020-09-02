@@ -1,6 +1,6 @@
 package jvizedit.control.core.events;
 
-public interface IMouseWheelEvent {
+public interface IMouseWheelEvent extends IWrappedEvent {
 
 	double wheelCount();
 	

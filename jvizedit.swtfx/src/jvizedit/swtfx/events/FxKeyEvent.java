@@ -31,6 +31,11 @@ public class FxKeyEvent implements IKeyEvent {
 	}
 	
 	@Override
+	public KeyEvent getRealEvent() {
+		return fxEvent;
+	}
+	
+	@Override
 	public boolean isKeyReleased() {
 		return fxEvent.getEventType() == KeyEvent.KEY_RELEASED;
 	}
