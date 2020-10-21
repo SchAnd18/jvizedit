@@ -13,6 +13,6 @@ public interface IControllerFactory {
 	 */
 	IController createController(Object model, IContentManager contentManager, IController parent);
 	
-	IEdgeController createEdgeController(Object model, IContentManager contentManager, IController parent);
+	IEdgeController createEdgeController(Object model, IContentManager contentManager);
 	
 }

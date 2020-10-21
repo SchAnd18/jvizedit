@@ -2,8 +2,14 @@ package jvizedit.mvc;
 
 public interface IEdgeController extends IControllerBase {
 	
-	IEdgeContainer getParent();
+	IController getConnectedSourceController();
 	
-	void updateView(IEdgeContainer parent);
+	IController getConnectedTargetController();
+	
+	void updateView(IController sourceController, IController targetController);
+	
+	Object getSourceNode();
+	
+	Object getTargetNode();
 	
 }

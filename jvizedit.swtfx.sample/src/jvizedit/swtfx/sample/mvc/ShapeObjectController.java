@@ -63,7 +63,6 @@ public class ShapeObjectController extends AbstractObservingController<ShapeObje
 	
 	@Override
 	public void updateView() {
-		
 		if(getModel().getShapeType() == ShapeType.Oval) {
 			final Ellipse ellipse;
 			if(currentShape instanceof Ellipse) {

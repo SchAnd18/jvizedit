@@ -2,6 +2,8 @@ package jvizedit.mvc.content.core;
 
 import java.util.Collection;
 import java.util.Optional;
+import java.util.Set;
+import java.util.function.Supplier;
 
 import jvizedit.mvc.IController;
 import jvizedit.mvc.IControllerBase;
@@ -35,9 +37,13 @@ public interface IContentManager {
 	
 	IEdgeController getEdgeController(Object model);
 	
-	IEdgeController createEdgeController(Object model, IController parent);
+	IEdgeController createEdgeController(Object model);
+	
+	Set<IEdgeController> getConnectedEdgeControllers(IController controller);
 	
 	void setRoot(Object model);
+	
+	void setModelEdgeSupplier(Supplier<Collection<?>> edgeSupplier);
 	
 	IController getRootController();
 	

@@ -10,7 +10,6 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import jvizedit.mvc.IController;
-import jvizedit.mvc.IEdgeContainer;
 import jvizedit.mvc.content.IContentChangeListener.ContentChange;
 import jvizedit.mvc.content.core.IContentHandler;
 import jvizedit.mvc.content.core.IContentManager;
@@ -108,17 +107,6 @@ public class ControllerTreeUpdater {
 		
 		final Set<IController> allReused = new HashSet<>(reusedControllerToParentMap.keySet());
 		allReused.removeAll(allRemoved);
-		
-		
-		
-		//determine update for edges
-		final Set<IController> controllerEdgeUpdates = new HashSet<>();
-		controllerEdgeUpdates.addAll(contentUpdates.keySet()); //content updates keySet = all updated/invalidated controllers
-		controllerEdgeUpdates.removeAll(allRemoved);
-		final Set<IEdgeContainer> updatedEdgeContainers = controllerEdgeUpdates.stream().filter(IEdgeContainer.class::isInstance).map(IEdgeContainer.class::cast).collect(Collectors.toSet());
-		final Set<IEdgeContainer> removedEdgeContainers = allRemoved.stream().filter(IEdgeContainer.class::isInstance).map(IEdgeContainer.class::cast).collect(Collectors.toSet());
-		final EdgeUpdater edgeUpdater = new EdgeUpdater();
-		edgeUpdater.update(updatedEdgeContainers, removedEdgeContainers, contentManager);
 		
 		
 		

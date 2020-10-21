@@ -23,7 +23,7 @@ public class ShapeModelControllerFactory implements IControllerFactory {
 	}
 
 	@Override
-	public IEdgeController createEdgeController(Object model, IContentManager contentManager, IController parent) {
+	public IEdgeController createEdgeController(Object model, IContentManager contentManager) {
 		return null;
 	}
 

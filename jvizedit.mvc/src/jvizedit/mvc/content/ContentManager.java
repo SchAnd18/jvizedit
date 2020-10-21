@@ -7,7 +7,9 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 import jvizedit.mvc.IController;
@@ -22,9 +24,9 @@ public class ContentManager implements IContentManager {
 	private final List<IContentChangeListener> contentChangeListeners = new ArrayList<>();
 	private final List<IControllerFactory> controlerFactories = new ArrayList<>();
 	
-	//TODO: make one map out of these two
 	private final Map<Object,IController> modelControllerMap = new HashMap<>();
 	private final Map<Object,IEdgeController> edgeControllerMap = new HashMap<>();
+	private final Map<IController,Set<IEdgeController>> modelControllerToEdgeMap = new HashMap<>();
 	
 	private final Set<IController> invalidatedControllers = new HashSet<>();
 	private final Set<IEdgeController> invalidatedEdgeControllers = new HashSet<>();
@@ -32,6 +34,8 @@ public class ContentManager implements IContentManager {
 	private IController rootController;
 	private Object newRootObject;
 	private boolean rootUpdateRequired;
+	
+	private Supplier<Collection<?>> modelEdgeSupplier;
 
 	
 	@Override
@@ -69,17 +73,18 @@ public class ContentManager implements IContentManager {
 		} else {
 			throw new IllegalStateException("Unknown type of controller " + controller);
 		}
-		
 	}
 
 	@Override
 	public void performRefresh() {
 		final ControllerUpdateContext updateContext = new ControllerUpdateContext(this);
-		Set<IController> invalidatedControllers = new HashSet<>(this.invalidatedControllers);
+		final Set<IController> invalidatedControllers = new HashSet<>(this.invalidatedControllers);
 		this.invalidatedControllers.clear();
 		
+		final Set<IEdgeController> invalidatedEdgeControllers = new HashSet<>(this.invalidatedEdgeControllers);
+		this.invalidatedEdgeControllers.clear();
 		
-		///// root refresh
+		// root node refresh
 		if(rootUpdateRequired) {
 			final IController oldRootController = rootController;
 			if(rootController != null) {
@@ -94,21 +99,42 @@ public class ContentManager implements IContentManager {
 			contentChangeListeners.forEach(l->l.onRootChange(oldRootController, this.rootController));
 		}
 		
+		// node tree refresh
 		final ControllerTreeUpdater cu = new ControllerTreeUpdater();
 		final ContentChange cc = cu.update(invalidatedControllers, this);
 		
-		for(IController o: cc.getRemovedControllers()) {
-			modelControllerMap.remove(o.getModel());
-		}	
 		
+		// edges refresh
+		final EdgesUpdater eu = new EdgesUpdater(this);
+		eu.update(cc, invalidatedEdgeControllers);
+		
+		for(IController o: cc.getRemovedControllers()) {
+			final IController removedController = modelControllerMap.remove(o.getModel());
+			modelControllerToEdgeMap.remove(removedController);
+		}
 		contentChangeListeners.forEach(l->l.onContentChange(cc));
 	}
-	
 	
 	@Override
 	public void setRoot(Object root) {
 		this.newRootObject = root;
 		this.rootUpdateRequired = true;
+	}
+	
+	@Override
+	public void setModelEdgeSupplier(Supplier<Collection<?>> edgeSupplier) {
+		this.modelEdgeSupplier = edgeSupplier;
+	}
+	
+	protected Collection<?> getModelEdges() {
+		if(modelEdgeSupplier == null) {
+			return Collections.emptyList();
+		}
+		final Collection<?> result = modelEdgeSupplier.get();
+		if(result == null) {
+			return Collections.emptyList();
+		}
+		return result;
 	}
 
 	@Override
@@ -127,9 +153,9 @@ public class ContentManager implements IContentManager {
 	}
 	
 	@Override
-	public IEdgeController createEdgeController(Object model, IController parent) {
+	public IEdgeController createEdgeController(Object model) {
 		for(IControllerFactory factory: controlerFactories) {
-			final IEdgeController c = factory.createEdgeController(model, this, parent);
+			final IEdgeController c = factory.createEdgeController(model, this);
 			if(c != null) {
 				final IEdgeController oldController = this.edgeControllerMap.put(model, c);
 				if(oldController != null) {
@@ -160,4 +186,34 @@ public class ContentManager implements IContentManager {
 		return result;
 	}
 
+	@Override
+	public Set<IEdgeController> getConnectedEdgeControllers(IController controller) {
+		final Set<IEdgeController> result = modelControllerToEdgeMap.getOrDefault(controller, Collections.emptySet());
+		return Collections.unmodifiableSet(result);
+	}
+	
+	protected void updateEdgeControllerConnection(IEdgeController edgeController, IController oldConnected, IController newConnected) {
+		if(Objects.equals(oldConnected, newConnected)) {
+			return;
+		}
+		if(oldConnected != null) {
+			getConnectedEdgeControllersModifieable(oldConnected).remove(edgeController);
+		}
+		if(newConnected != null) {
+			getConnectedEdgeControllersModifieable(newConnected).add(edgeController);
+		}
+	}
+	
+	private Set<IEdgeController> getConnectedEdgeControllersModifieable(IController controller) {
+		final boolean isKnownController = modelControllerMap.containsKey(controller.getModel());
+		if(!isKnownController) {
+			throw new IllegalStateException("Controller is not managed by this content manager " + controller + ".");
+		}
+		return modelControllerToEdgeMap.computeIfAbsent(controller, __-> new HashSet<>());
+	}
+	
+	//TODO: remove this method
+	protected Map<Object, IEdgeController> getEdgeControllerMap() {
+		return edgeControllerMap;
+	}
 }

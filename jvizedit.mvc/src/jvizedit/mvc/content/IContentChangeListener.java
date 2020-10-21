@@ -65,7 +65,6 @@ public interface IContentChangeListener {
 		public Set<IController> getRelocatedControllers() {
 			return relocatedControllers;
 		}
-		
 	}
 	
 }

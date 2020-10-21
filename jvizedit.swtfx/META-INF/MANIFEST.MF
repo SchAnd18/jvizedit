@@ -9,4 +9,5 @@ Require-Bundle: jvizedit.control,
  jvizedit.mvc,
  org.eclipse.swt
 Export-Package: jvizedit.swtfx,
- jvizedit.swtfx.events
+ jvizedit.swtfx.events,
+ jvizedit.swtfx.fxuitl
