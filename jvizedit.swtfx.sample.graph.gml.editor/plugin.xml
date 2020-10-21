@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+
+<!--
+-->
+
+<plugin>
+
+   <extension point="org.eclipse.ui.newWizards">
+      <!-- @generated gml -->
+      <category
+            id="org.eclipse.emf.ecore.Wizard.category.ID"
+            name="%_UI_Wizard_category"/>
+      <wizard
+            id="jvizedit.swtfx.sample.graph.gml.presentation.GmlModelWizardID"
+            name="%_UI_GmlModelWizard_label"
+            class="jvizedit.swtfx.sample.graph.gml.presentation.GmlModelWizard"
+            category="org.eclipse.emf.ecore.Wizard.category.ID"
+            icon="icons/full/obj16/GmlModelFile.gif">
+         <description>%_UI_GmlModelWizard_description</description>
+         <selection class="org.eclipse.core.resources.IResource"/>
+      </wizard>
+   </extension>
+
+   <extension point="org.eclipse.ui.editors">
+      <!-- @generated gml -->
+      <editor
+            id="jvizedit.swtfx.sample.graph.gml.presentation.GmlEditorID"
+            name="%_UI_GmlEditor_label"
+            icon="icons/full/obj16/GmlModelFile.gif"
+            extensions="gml"
+            class="jvizedit.swtfx.sample.graph.gml.presentation.GmlEditor"
+            contributorClass="jvizedit.swtfx.sample.graph.gml.presentation.GmlActionBarContributor">
+      </editor>
+   </extension>
+
+</plugin>

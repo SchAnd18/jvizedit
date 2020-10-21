@@ -1,0 +1,38 @@
+@GenModel(editDirectory="/jvizedit.swtfx.sample.graph.gml.edit/src-gen")
+@GenModel(editorDirectory="/jvizedit.swtfx.sample.graph.gml.editor/src-gen")
+package jvizedit.swtfx.sample.graph.gml
+
+class GraphModelRoot {
+	contains Connections connections
+	contains Nodes nodes
+}
+
+class Connections {
+	contains Connection [] connections
+}
+
+class Nodes {
+	contains GraphNode [] nodes
+}
+
+class Connection {
+	refers ShapeNode src
+	refers ShapeNode target
+	double [] path
+}
+
+abstract class ShapeNode {
+	String name
+	double x
+	double y
+	double width
+	double height
+}
+
+class GraphNode extends ShapeNode {
+	contains ShapeNode [] children
+}
+
+class Port extends ShapeNode {
+	
+}
