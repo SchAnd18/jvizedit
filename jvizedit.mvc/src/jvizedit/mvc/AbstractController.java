@@ -8,7 +8,7 @@ public abstract class AbstractController implements IController {
 	public AbstractController(final IController parent) {
 		this.parent = parent;
 	}
-	
+
 //	@Override
 //	public void addConnectedEdge(IEdgeController edge) {
 //		connectedEdges.add(edge);
@@ -28,11 +28,10 @@ public abstract class AbstractController implements IController {
 	public IController getParent() {
 		return parent;
 	}
-	
+
 	@Override
 	public void relocateToNewParent(IController newParent) {
 		this.parent = newParent;
 	}
-
 
 }

@@ -16,23 +16,23 @@ public class FxRootControl implements IContentChangeListener, INavigableArea {
 	private final Group root = new Group();
 	private final Group feedbackLayer = new Group();
 	private final Scene scene;
-	
+
 	private Node currentRootControllerNode;
-	
+
 	public FxRootControl() {
-		this.root.getTransforms().addAll(translate,scale);
+		this.root.getTransforms().addAll(translate, scale);
 		this.scene = new Scene(this.root);
 		this.root.getChildren().add(feedbackLayer);
 	}
-	
+
 	public Scene getScene() {
 		return scene;
 	}
-	
+
 	public Group getFeedbackLayer() {
 		return feedbackLayer;
 	}
-	
+
 	@Override
 	public void setOffset(double x, double y) {
 		translate.setX(x);
@@ -59,15 +59,15 @@ public class FxRootControl implements IContentChangeListener, INavigableArea {
 	public double getScale() {
 		return this.scale.getX();
 	}
-	
+
 	@Override
 	public void onRootChange(IController oldRootController, IController newRootController) {
-		if(currentRootControllerNode != null) {
+		if (currentRootControllerNode != null) {
 			this.root.getChildren().remove(currentRootControllerNode);
 		}
 		currentRootControllerNode = newRootController.getViewAsType(Node.class);
-		if(currentRootControllerNode != null) {
-			this.root.getChildren().add(0,currentRootControllerNode);
+		if (currentRootControllerNode != null) {
+			this.root.getChildren().add(0, currentRootControllerNode);
 		}
 	}
 

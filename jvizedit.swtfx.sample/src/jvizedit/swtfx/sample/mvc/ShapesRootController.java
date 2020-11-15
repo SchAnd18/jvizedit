@@ -15,14 +15,15 @@ public class ShapesRootController extends AbstractObservingController<ShapesRoot
 
 	private final UnorderedContentHandler<IController> contentHandler = new UnorderedContentHandler<IController>(this);
 	private boolean isDisposed = false;
-	
+
 	private final Group group;
-	
+
 	public ShapesRootController(IContentManager contentManager, IController parent, ShapesRoot shapesRoot) {
 		super(contentManager, parent, shapesRoot);
-		
+
 		group = new Group();
-		group.setUserData(shapesRoot);;
+		group.setUserData(shapesRoot);
+		;
 	}
 
 	@Override
@@ -34,17 +35,17 @@ public class ShapesRootController extends AbstractObservingController<ShapesRoot
 	public void updateView() {
 		final List<Node> nodes = contentHandler.getContentControllsAs(Node.class);
 		group.getChildren().setAll(nodes);
-		
-		/* Alternative:
-		final UnorderedContentUpdate<IController> update = contentHandler.getLastUpdate();
-		if(update != null) {
-			final Collection<Node> addedElements = update.getAddedUiElementsAsType(Node.class);
-			group.getChildren().addAll(addedElements);
-			
-			final Collection<Node> removedElements = update.getRemovedUiElementsAsType(Node.class);
-			group.getChildren().removeAll(removedElements);
-		}
-		*/
+
+		/*
+		 * Alternative: final UnorderedContentUpdate<IController> update =
+		 * contentHandler.getLastUpdate(); if(update != null) { final Collection<Node>
+		 * addedElements = update.getAddedUiElementsAsType(Node.class);
+		 * group.getChildren().addAll(addedElements);
+		 * 
+		 * final Collection<Node> removedElements =
+		 * update.getRemovedUiElementsAsType(Node.class);
+		 * group.getChildren().removeAll(removedElements); }
+		 */
 	}
 
 	@Override
@@ -62,11 +63,9 @@ public class ShapesRootController extends AbstractObservingController<ShapesRoot
 		this.isDisposed = true;
 	}
 
-
 	@Override
 	public Object getView() {
 		return group;
 	}
 
-	
 }

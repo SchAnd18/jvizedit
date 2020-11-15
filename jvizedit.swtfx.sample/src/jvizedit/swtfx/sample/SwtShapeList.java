@@ -33,7 +33,7 @@ public class SwtShapeList {
 		tableViewer.setInput(ShapeType.values());
 
 		final DragSource dragSource = new DragSource(tableViewer.getControl(), DND.DROP_MOVE);
-		dragSource.setTransfer(LocalSelectionTransfer.getTransfer(),TextTransfer.getInstance());
+		dragSource.setTransfer(LocalSelectionTransfer.getTransfer(), TextTransfer.getInstance());
 		dragSource.addDragListener(new DragSourceAdapter() {
 
 			@Override
@@ -45,8 +45,8 @@ public class SwtShapeList {
 			public void dragSetData(DragSourceEvent event) {
 				final IStructuredSelection selection = tableViewer.getStructuredSelection();
 				LocalSelectionTransfer.getTransfer().setSelection(selection);
-				
-				if(TextTransfer.getInstance().isSupportedType(event.dataType)) {
+
+				if (TextTransfer.getInstance().isSupportedType(event.dataType)) {
 					final String value = selection.getFirstElement().toString();
 					event.data = value;
 				}

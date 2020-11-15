@@ -12,90 +12,89 @@ import javafx.scene.Parent;
 import jvizedit.mvc.IController;
 
 public class FxNodePickingIterator {
-	
+
 	public static <T> Optional<T> findControllerOfType(IController start, Class<T> controllerType, double x, double y) {
 		final List<T> result = new ArrayList<T>(1);
 		final FxNodePickingIterator npi = new FxNodePickingIterator();
-		npi.setOnEnterNode((c,n)-> {
-			if(controllerType.isInstance(c)) {
+		npi.setOnEnterNode((c, n) -> {
+			if (controllerType.isInstance(c)) {
 				result.add(controllerType.cast(c));
 				return ENavigationCommand.quit;
 			}
 			return ENavigationCommand.goOn;
 		});
 		npi.pickNode(start, x, y);
-		if(result.isEmpty()) {
+		if (result.isEmpty()) {
 			return Optional.empty();
 		} else {
 			return Optional.of(result.get(0));
 		}
 	}
-	
-	private BiFunction<IController, Node, ENavigationCommand> enterNodeFunction = (c,n) -> {
+
+	private BiFunction<IController, Node, ENavigationCommand> enterNodeFunction = (c, n) -> {
 		return ENavigationCommand.goOn;
 	};
-	
-	private BiFunction<IController, Node, ENavigationCommand> leaveNodeFunction = (c,n) -> {
+
+	private BiFunction<IController, Node, ENavigationCommand> leaveNodeFunction = (c, n) -> {
 		return ENavigationCommand.goOn;
 	};
-	
+
 	public FxNodePickingIterator setOnEnterNode(BiFunction<IController, Node, ENavigationCommand> onEnterNode) {
 		this.enterNodeFunction = onEnterNode;
 		return this;
 	}
-	
+
 	public FxNodePickingIterator setOnLeaveNode(BiFunction<IController, Node, ENavigationCommand> onLeaveNode) {
 		this.leaveNodeFunction = onLeaveNode;
 		return this;
 	}
-	
-	
+
 	public void pickNode(final IController controller, final double sceneX, final double sceneY) {
 		final Node node = controller.getViewAsType(Node.class);
 		final Point2D local = node.sceneToLocal(sceneX, sceneY);
-		if(node.getBoundsInLocal().contains(local) && node.contains(local)) {
+		if (node.getBoundsInLocal().contains(local) && node.contains(local)) {
 			final ENavigationCommand nc = enterNodeFunction.apply(controller, node);
-			switch(nc) {
+			switch (nc) {
 			case quit:
 			case skip:
 				return;
 			case goOn:
 			}
-			
-			if(node instanceof Parent) {
-				final Parent asParent = (Parent)node;
+
+			if (node instanceof Parent) {
+				final Parent asParent = (Parent) node;
 				pickNode(controller, asParent, local);
 			}
 			leaveNodeFunction.apply(controller, node);
 		}
 	}
-	
+
 	private ENavigationCommand pickNode(final IController controller, final Parent parent, final Point2D parentPos) {
 		final List<? extends Node> children = parent.getChildrenUnmodifiable();
 		final ListIterator<? extends Node> iterator = children.listIterator(children.size());
-		while(iterator.hasPrevious()) {
+		while (iterator.hasPrevious()) {
 			final Node node = iterator.previous();
 			final Point2D local = node.parentToLocal(parentPos);
-			if(node.getBoundsInLocal().contains(local) && node.contains(local)) {
-				
+			if (node.getBoundsInLocal().contains(local) && node.contains(local)) {
+
 				final IController nodeController = this.getController(node).orElse(controller);
 				final ENavigationCommand ncEnter = enterNodeFunction.apply(nodeController, node);
-				switch(ncEnter) {
+				switch (ncEnter) {
 				case quit:
 					return ENavigationCommand.quit;
 				case goOn:
-					if(node instanceof Parent) {
-						final Parent asParent = (Parent)node;
+					if (node instanceof Parent) {
+						final Parent asParent = (Parent) node;
 						final ENavigationCommand ncSub = pickNode(nodeController, asParent, local);
-						if(ncSub == ENavigationCommand.quit) {
+						if (ncSub == ENavigationCommand.quit) {
 							return ENavigationCommand.quit;
 						}
 					}
 				case skip:
 				}
-				
+
 				final ENavigationCommand ncLeave = leaveNodeFunction.apply(nodeController, node);
-				switch(ncLeave) {
+				switch (ncLeave) {
 				case quit:
 					return ENavigationCommand.quit;
 				case skip:
@@ -106,26 +105,26 @@ public class FxNodePickingIterator {
 		}
 		return ENavigationCommand.goOn;
 	}
-	
+
 	private Optional<IController> getController(final Node node) {
 		final Object userData = node.getUserData();
-		if(!(userData instanceof IController)) {
+		if (!(userData instanceof IController)) {
 			return Optional.empty();
 		}
-		final IController c = (IController)userData;
+		final IController c = (IController) userData;
 		return Optional.of(c);
 	}
-	
-	
+
 	public static enum ENavigationCommand {
 		/**
 		 * Stops iterating
 		 */
 		quit,
 		/**
-		 * Only allowed when a node is entered. It signals the iterator not not enter this part of the tree any further
+		 * Only allowed when a node is entered. It signals the iterator not not enter
+		 * this part of the tree any further
 		 */
-		skip, 
+		skip,
 		/**
 		 * Go on with iteration
 		 */

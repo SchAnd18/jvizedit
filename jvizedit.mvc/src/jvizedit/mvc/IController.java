@@ -6,30 +6,29 @@ import java.util.Collections;
 import jvizedit.mvc.content.core.IContentHandler;
 
 public interface IController extends IControllerBase {
-	
+
 	Collection<?> getModelChildren();
-	
+
 	void updateView();
-	
+
 	IContentHandler<IController> getConentHandler();
-	
+
 	IController getParent();
-	
-	//TODO: remove this method
+
+	// TODO: remove this method
 	void relocateToNewParent(IController newParent);
-	
-	
+
 	default Collection<IController> getControllerChildren() {
 		final IContentHandler<IController> ch = getConentHandler();
-		if(ch == null) {
+		if (ch == null) {
 			return Collections.emptyList();
 		}
 		return ch.getContent();
 	}
-	
+
 	default boolean hasControllerChildren() {
 		final IContentHandler<IController> ch = getConentHandler();
 		return ch != null && ch.getContent().isEmpty() == false;
 	}
-	
+
 }

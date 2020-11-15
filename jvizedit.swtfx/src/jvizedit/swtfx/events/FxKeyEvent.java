@@ -13,8 +13,8 @@ public class FxKeyEvent implements IKeyEvent {
 
 	public static EventHandler<Event> addKeyEventFilter(final Scene scene, final ControlStateMachine cstm) {
 		final EventHandler<Event> handler = event -> {
-			if(event instanceof KeyEvent) {
-				final KeyEvent keyEvent = (KeyEvent)event;
+			if (event instanceof KeyEvent) {
+				final KeyEvent keyEvent = (KeyEvent) event;
 				final FxKeyEvent fxKeyEvent = new FxKeyEvent(keyEvent);
 				cstm.handleEvent(fxKeyEvent);
 			}
@@ -22,19 +22,18 @@ public class FxKeyEvent implements IKeyEvent {
 		scene.addEventFilter(EventType.ROOT, handler);
 		return handler;
 	}
-	
-	
+
 	private final KeyEvent fxEvent;
-	
+
 	public FxKeyEvent(final KeyEvent fxEvent) {
 		this.fxEvent = fxEvent;
 	}
-	
+
 	@Override
 	public KeyEvent getRealEvent() {
 		return fxEvent;
 	}
-	
+
 	@Override
 	public boolean isKeyReleased() {
 		return fxEvent.getEventType() == KeyEvent.KEY_RELEASED;
@@ -47,7 +46,7 @@ public class FxKeyEvent implements IKeyEvent {
 
 	@Override
 	public Key getKey() {
-		if(fxEvent.getCode() == KeyCode.ESCAPE) {
+		if (fxEvent.getCode() == KeyCode.ESCAPE) {
 			return Key.ESCAPE;
 		}
 		return Key.UNKNOWN;

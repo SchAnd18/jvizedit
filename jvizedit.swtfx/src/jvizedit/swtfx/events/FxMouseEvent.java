@@ -1,6 +1,5 @@
 package jvizedit.swtfx.events;
 
-
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.event.EventType;
@@ -13,31 +12,32 @@ public class FxMouseEvent implements IMouseEvent {
 
 	public static EventHandler<Event> addMouseEventFilter(final Scene scene, final ControlStateMachine cstm) {
 		final EventHandler<Event> handler = event -> {
-			if(event instanceof MouseEvent) {
-				final MouseEvent mouseEvent = (MouseEvent)event;
+			if (event instanceof MouseEvent) {
+				final MouseEvent mouseEvent = (MouseEvent) event;
 				final FxMouseEvent fxKeyEvent = new FxMouseEvent(mouseEvent);
 				cstm.handleEvent(fxKeyEvent);
 			}
-			
+
 		};
 		scene.addEventFilter(EventType.ROOT, handler);
 		return handler;
 	}
-	
+
 	private final MouseEvent wrappedMouseEvent;
-	
+
 	public FxMouseEvent(final MouseEvent wrappedMouseEvent) {
 		this.wrappedMouseEvent = wrappedMouseEvent;
 	}
-	
+
 	@Override
 	public MouseEvent getRealEvent() {
 		return wrappedMouseEvent;
 	}
-	
+
 	@Override
 	public boolean isDrag() {
-		return MouseEvent.DRAG_DETECTED.equals(wrappedMouseEvent.getEventType()) || MouseEvent.MOUSE_DRAGGED.equals(wrappedMouseEvent.getEventType());
+		return MouseEvent.DRAG_DETECTED.equals(wrappedMouseEvent.getEventType())
+				|| MouseEvent.MOUSE_DRAGGED.equals(wrappedMouseEvent.getEventType());
 	}
 
 	@Override
@@ -67,7 +67,7 @@ public class FxMouseEvent implements IMouseEvent {
 
 	@Override
 	public MouseButton getButton() {
-		switch(wrappedMouseEvent.getButton()) {			
+		switch (wrappedMouseEvent.getButton()) {
 		case NONE:
 			return MouseButton.NONE;
 		case PRIMARY:
@@ -79,6 +79,5 @@ public class FxMouseEvent implements IMouseEvent {
 			return MouseButton.UNKNOWN;
 		}
 	}
-
 
 }

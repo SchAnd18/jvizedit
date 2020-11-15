@@ -2,9 +2,6 @@ package jvizedit.control.dragdrop;
 
 public enum EDiagramDragEventType {
 
-	startDrag,
-	continueDrag,
-	drop,
-	abortDrag
-	
+	startDrag, continueDrag, drop, abortDrag
+
 }

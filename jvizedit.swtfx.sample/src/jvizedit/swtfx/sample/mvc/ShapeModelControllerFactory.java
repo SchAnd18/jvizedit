@@ -11,12 +11,12 @@ public class ShapeModelControllerFactory implements IControllerFactory {
 
 	@Override
 	public IController createController(Object model, IContentManager contentManager, IController parent) {
-		if(model instanceof ShapesRoot) {
-			final ShapesRoot sr = (ShapesRoot)model;
+		if (model instanceof ShapesRoot) {
+			final ShapesRoot sr = (ShapesRoot) model;
 			return new ShapesRootController(contentManager, parent, sr);
 		}
-		if(model instanceof ShapeObject) {
-			final ShapeObject so = (ShapeObject)model;
+		if (model instanceof ShapeObject) {
+			final ShapeObject so = (ShapeObject) model;
 			return new ShapeObjectController(contentManager, parent, so);
 		}
 		return null;

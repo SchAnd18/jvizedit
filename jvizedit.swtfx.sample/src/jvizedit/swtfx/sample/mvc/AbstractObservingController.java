@@ -6,12 +6,13 @@ import jvizedit.mvc.content.core.IContentManager;
 import jvizedit.swtfx.sample.model.AbstractObervableObject;
 import jvizedit.swtfx.sample.model.IObjectChangeListener;
 
-public abstract class AbstractObservingController<T extends AbstractObervableObject> extends AbstractController implements IObjectChangeListener {
+public abstract class AbstractObservingController<T extends AbstractObervableObject> extends AbstractController
+		implements IObjectChangeListener {
 
 	private final IContentManager contentManager;
 	private final T modelObj;
 	private boolean isDisposed = false;
-	
+
 	public AbstractObservingController(IContentManager contentManager, IController parent, T modelObj) {
 		super(parent);
 		this.contentManager = contentManager;

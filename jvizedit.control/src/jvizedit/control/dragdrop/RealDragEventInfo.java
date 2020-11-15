@@ -6,12 +6,12 @@ public class RealDragEventInfo implements IDragEventInfo {
 
 	private final IDragEvent sourceEvent;
 	private final EDiagramDragEventType type;
-	
+
 	public RealDragEventInfo(final IDragEvent sourceEvent, final EDiagramDragEventType type) {
 		this.sourceEvent = sourceEvent;
 		this.type = type;
 	}
-	
+
 	@Override
 	public EDiagramDragEventType getType() {
 		return type;
