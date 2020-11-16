@@ -8,16 +8,21 @@ import jvizedit.control.core.ControlStateMachine;
 import jvizedit.control.core.IControlStateEventHandler;
 import jvizedit.control.core.events.IMouseEvent;
 import jvizedit.control.core.events.IMouseEvent.MouseButton;
+import jvizedit.control.selection.ISelectableController;
+import jvizedit.control.selection.ISelectableFinder;
 
 public class OpenContextMenu implements IControlStateEventHandler<IMouseEvent> {
 
 	public static final String STATE_RIGHT_MOUSE_DOWN = "RightMouseDown";
 
 	private final List<IOpenContextMenuListener> listeners = new ArrayList<>();
+	private final ISelectableFinder controllerFinder;
 	private final ControlState rightMouseDown;
 	private final ControlState initState;
 
-	public OpenContextMenu(final ControlStateMachine cstm) {
+	public OpenContextMenu(final ControlStateMachine cstm, final ISelectableFinder controllerFinder) {
+		this.controllerFinder = controllerFinder;
+
 		this.rightMouseDown = cstm.getOrCreateState(STATE_RIGHT_MOUSE_DOWN);
 		this.initState = cstm.getInitState();
 
@@ -39,10 +44,12 @@ public class OpenContextMenu implements IControlStateEventHandler<IMouseEvent> {
 			final IMouseEvent event) {
 		final boolean mouseUp = event.isButtonUp() && (event.getButton() == MouseButton.RIGHT);
 		if ((srcState == this.rightMouseDown) && (targetState == this.initState) && mouseUp) {
+			final ISelectableController selectableController = this.controllerFinder.findControllerAt(event.getX(),
+					event.getY(), event);
 			final double x = event.getX();
 			final double y = event.getY();
-			this.listeners.forEach(i -> {
-				i.showContextMenu(x, y);
+			this.listeners.forEach(listener -> {
+				listener.showContextMenu(selectableController, x, y);
 			});
 			return true;
 		}
@@ -64,7 +71,7 @@ public class OpenContextMenu implements IControlStateEventHandler<IMouseEvent> {
 
 	public interface IOpenContextMenuListener {
 
-		void showContextMenu(final double x, final double y);
+		void showContextMenu(ISelectableController controller, double x, double y);
 
 	}
 

@@ -4,6 +4,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Menu;
 
 import jvizedit.control.OpenContextMenu.IOpenContextMenuListener;
+import jvizedit.control.selection.ISelectableController;
 
 public class ContextMenu implements IOpenContextMenuListener {
 
@@ -15,7 +16,7 @@ public class ContextMenu implements IOpenContextMenuListener {
 	}
 
 	@Override
-	public void showContextMenu(final double x, final double y) {
+	public void showContextMenu(final ISelectableController controller, final double x, final double y) {
 		this.swtMenu.setLocation((int) x, (int) y);
 		this.swtMenu.setVisible(true);
 	}

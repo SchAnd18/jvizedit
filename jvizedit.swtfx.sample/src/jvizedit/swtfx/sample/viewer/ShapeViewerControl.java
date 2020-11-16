@@ -69,14 +69,15 @@ public class ShapeViewerControl {
 				}
 			});
 
-			final OpenContextMenu openContextMenu = new OpenContextMenu(cstm);
+			final ISelectableFinder selectableFinder = new SelectableControllerFinderImpl(this.modelContent);
+
+			final OpenContextMenu openContextMenu = new OpenContextMenu(cstm, selectableFinder);
 			openContextMenu.addOpenContextMenuListener(new ContextMenu(this.fxCanvas));
 
 			new DragDiagram(cstm, openContextMenu, fxRoot);
 
 			new Zoom(cstm, fxRoot);
 
-			final ISelectableFinder selectableFinder = new SelectableControllerFinderImpl(this.modelContent);
 			final SelectOnClick selectOnClick = new SelectOnClick(cstm, selectableFinder);
 
 			this.viewerSelection = new ViewerSelection(this.modelContent);
