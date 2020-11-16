@@ -24,8 +24,8 @@ public class EdgesUpdater {
 		performUpdate(invalidatedEdges);
 	}
 
-	private void collectIndirectlyInvalidEdges(final ContentChange nodeContentChange,
-			final ContentManager contentManager, final Set<IEdgeController> invalidatedEdges) {
+	private void collectIndirectlyInvalidEdges(final ContentChange nodeContentChange, final ContentManager contentManager,
+			final Set<IEdgeController> invalidatedEdges) {
 
 		// invalidate all edge controllers that are connected to removed controllers
 		nodeContentChange.getRemovedControllers().stream() //

@@ -184,8 +184,7 @@ public class ContentManager implements IContentManager {
 
 	@Override
 	public Set<IEdgeController> getConnectedEdgeControllers(final IController controller) {
-		final Set<IEdgeController> result = this.modelControllerToEdgeMap.getOrDefault(controller,
-				Collections.emptySet());
+		final Set<IEdgeController> result = this.modelControllerToEdgeMap.getOrDefault(controller, Collections.emptySet());
 		return Collections.unmodifiableSet(result);
 	}
 

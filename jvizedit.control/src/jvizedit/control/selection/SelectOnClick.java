@@ -58,8 +58,7 @@ public class SelectOnClick implements IControlStateEventHandler<IMouseEvent> {
 		return this.mouseDown;
 	}
 
-	public boolean updateSelection(final IMouseEvent mouseEvent, final ControlState srcState,
-			final SelectionUpdate update) {
+	public boolean updateSelection(final IMouseEvent mouseEvent, final ControlState srcState, final SelectionUpdate update) {
 		if (srcState == this.mouseDownOnSelectable) {
 			if (this.currentSelectable != null) {
 				for (final ISelectOnClickListener listener : this.listeners) {
@@ -80,12 +79,10 @@ public class SelectOnClick implements IControlStateEventHandler<IMouseEvent> {
 	}
 
 	@Override
-	public boolean handleInputEvent(final ControlState srcState, final ControlState targetState,
-			final IMouseEvent event) {
+	public boolean handleInputEvent(final ControlState srcState, final ControlState targetState, final IMouseEvent event) {
 
 		if ((srcState == this.init) && event.isButtonDown() && (event.getButton() == MouseButton.LEFT)) {
-			final ISelectableController controller = this.controllerFinder.findControllerAt(event.getX(), event.getY(),
-					event);
+			final ISelectableController controller = this.controllerFinder.findControllerAt(event.getX(), event.getY(), event);
 			if (targetState == this.mouseDownOnSelectable) {
 				if (controller != null) {
 					this.currentSelectable = controller;

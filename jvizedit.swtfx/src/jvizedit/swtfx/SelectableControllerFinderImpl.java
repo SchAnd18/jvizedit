@@ -52,8 +52,7 @@ public class SelectableControllerFinderImpl implements ISelectableFinder {
 	}
 
 	@Override
-	public Collection<ISelectableController> findControllersIn(final double x, final double y, final double width,
-			final double height) {
+	public Collection<ISelectableController> findControllersIn(final double x, final double y, final double width, final double height) {
 		final Bounds selectionBoundsScene = new BoundingBox(x, y, width, height);
 		final List<ISelectableController> result = new ArrayList<>();
 		final List<IController> root = Collections.singletonList(this.objectContent.getRootController());
@@ -119,8 +118,7 @@ public class SelectableControllerFinderImpl implements ISelectableFinder {
 	}
 
 	@Override
-	public Collection<ISelectableController> findControllersIntersecting(final int x, final int y, final int width,
-			final int height) {
+	public Collection<ISelectableController> findControllersIntersecting(final int x, final int y, final int width, final int height) {
 		final Bounds selectionBoundsScene = new BoundingBox(x, y, width, height);
 		final List<ISelectableController> result = new ArrayList<>();
 		final List<IController> root = Collections.singletonList(this.objectContent.getRootController());
@@ -129,8 +127,8 @@ public class SelectableControllerFinderImpl implements ISelectableFinder {
 	}
 
 	// TODO: Optimization possible (see comment above)
-	private boolean findIntersectionsWithBounds(final Collection<IController> currentChildren,
-			final Bounds selectionBoundsScene, final List<ISelectableController> result) {
+	private boolean findIntersectionsWithBounds(final Collection<IController> currentChildren, final Bounds selectionBoundsScene,
+			final List<ISelectableController> result) {
 		boolean foundIntersectingSelectables = false;
 		// it is assumed that many children are contained in the same parent node,
 		// therefore we cache the calculated selection bounds for the parents
@@ -166,8 +164,7 @@ public class SelectableControllerFinderImpl implements ISelectableFinder {
 			if (selectionBoundsInParent.intersects(boundsInParent)) {
 				boolean foundInChildren = false;
 				if (hasChildren) {
-					foundInChildren = findIntersectionsWithBounds(child.getControllerChildren(), selectionBoundsScene,
-							result);
+					foundInChildren = findIntersectionsWithBounds(child.getControllerChildren(), selectionBoundsScene, result);
 				}
 				if (foundInChildren) {
 					foundIntersectingSelectables = true;

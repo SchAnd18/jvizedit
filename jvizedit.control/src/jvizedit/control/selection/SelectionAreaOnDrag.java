@@ -46,11 +46,9 @@ public class SelectionAreaOnDrag implements IControlStateUpdateListener {
 
 	private final IControlStateEventHandler<IKeyEvent> abortDrag = new IControlStateEventHandler<IKeyEvent>() {
 		@Override
-		public boolean handleInputEvent(final ControlState srcState, final ControlState targetState,
-				final IKeyEvent event) {
+		public boolean handleInputEvent(final ControlState srcState, final ControlState targetState, final IKeyEvent event) {
 			final boolean escUp = event.isKeyReleased() && (event.getKey() == Key.ESCAPE);
-			if ((srcState == SelectionAreaOnDrag.this.selectionArea) && (targetState == SelectionAreaOnDrag.this.init)
-					&& escUp) {
+			if ((srcState == SelectionAreaOnDrag.this.selectionArea) && (targetState == SelectionAreaOnDrag.this.init) && escUp) {
 				SelectionAreaOnDrag.this.selectionAreaStart = null;
 				cancelSelectionArea();
 				return true;
@@ -67,8 +65,7 @@ public class SelectionAreaOnDrag implements IControlStateUpdateListener {
 	private final IControlStateEventHandler<IMouseEvent> performDrag = new IControlStateEventHandler<IMouseEvent>() {
 
 		@Override
-		public boolean handleInputEvent(final ControlState srcState, final ControlState targetState,
-				final IMouseEvent event) {
+		public boolean handleInputEvent(final ControlState srcState, final ControlState targetState, final IMouseEvent event) {
 			if (SelectionAreaOnDrag.this.selectionAreaStart == null) {
 				return false;
 			}
@@ -76,18 +73,15 @@ public class SelectionAreaOnDrag implements IControlStateUpdateListener {
 			final boolean isDrag = event.isDrag() && (event.getButton() == MouseButton.LEFT);
 			final boolean isMouseUp = event.isButtonUp() && (event.getButton() == MouseButton.LEFT);
 
-			if ((srcState == SelectionAreaOnDrag.this.mouseDown)
-					&& (targetState == SelectionAreaOnDrag.this.selectionArea) && isDrag) {
+			if ((srcState == SelectionAreaOnDrag.this.mouseDown) && (targetState == SelectionAreaOnDrag.this.selectionArea) && isDrag) {
 				updateSelectionArea(event, ESelectionAreaEvent.init);
 				return true;
 			}
-			if ((srcState == SelectionAreaOnDrag.this.selectionArea)
-					&& (targetState == SelectionAreaOnDrag.this.selectionArea) && isDrag) {
+			if ((srcState == SelectionAreaOnDrag.this.selectionArea) && (targetState == SelectionAreaOnDrag.this.selectionArea) && isDrag) {
 				updateSelectionArea(event, ESelectionAreaEvent.update);
 				return true;
 			}
-			if ((srcState == SelectionAreaOnDrag.this.selectionArea) && (targetState == SelectionAreaOnDrag.this.init)
-					&& isMouseUp) {
+			if ((srcState == SelectionAreaOnDrag.this.selectionArea) && (targetState == SelectionAreaOnDrag.this.init) && isMouseUp) {
 				updateSelectionArea(event, ESelectionAreaEvent.apply);
 				return true;
 			}
@@ -119,8 +113,8 @@ public class SelectionAreaOnDrag implements IControlStateUpdateListener {
 	}
 
 	@Override
-	public void controlStateChanged(final ControlState oldState, final ControlState newState,
-			final IControlStateEventHandler<?> transition, final Object event) {
+	public void controlStateChanged(final ControlState oldState, final ControlState newState, final IControlStateEventHandler<?> transition,
+			final Object event) {
 		if ((newState == this.mouseDown) && (event instanceof IMouseEvent)) {
 			final IMouseEvent me = (IMouseEvent) event;
 			this.selectionAreaStart = new Point2D(me.getX(), me.getY());
@@ -129,8 +123,7 @@ public class SelectionAreaOnDrag implements IControlStateUpdateListener {
 
 	public interface ISelectionAreaListener {
 
-		void onSelectionArea(ESelectionAreaEvent event, double x, double y, double width, double height,
-				boolean toggle);
+		void onSelectionArea(ESelectionAreaEvent event, double x, double y, double width, double height, boolean toggle);
 
 	}
 

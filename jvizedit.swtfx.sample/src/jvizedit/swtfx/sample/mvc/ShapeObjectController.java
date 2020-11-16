@@ -34,8 +34,7 @@ public class ShapeObjectController extends AbstractObservingController<ShapeObje
 	private final Label textLabel;
 	private Shape currentShape;
 
-	public ShapeObjectController(final IContentManager contentManager, final IController parent,
-			final ShapeObject shapeObject) {
+	public ShapeObjectController(final IContentManager contentManager, final IController parent, final ShapeObject shapeObject) {
 		super(contentManager, parent, shapeObject);
 
 		// setup ui

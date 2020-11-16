@@ -23,8 +23,7 @@ public class ViewerSelectionUpdater implements ISelectionAreaListener, ISelectOn
 	}
 
 	@Override
-	public void updateSelection(final IMouseEvent mouseEvent, final ISelectableController controller,
-			final SelectionUpdate update) {
+	public void updateSelection(final IMouseEvent mouseEvent, final ISelectableController controller, final SelectionUpdate update) {
 		try (ViewerSelectionUpdate selectionUpdate = this.viewerSelection.startSelectionUpdate()) {
 			final Object model = controller.getModel();
 			switch (update) {
@@ -57,16 +56,14 @@ public class ViewerSelectionUpdater implements ISelectionAreaListener, ISelectOn
 	}
 
 	@Override
-	public void onSelectionArea(final ESelectionAreaEvent event, final double x, final double y, final double width,
-			final double height, final boolean toggle) {
+	public void onSelectionArea(final ESelectionAreaEvent event, final double x, final double y, final double width, final double height,
+			final boolean toggle) {
 		if (event != ESelectionAreaEvent.apply) {
 			return;
 		}
 		try (ViewerSelectionUpdate selectionUpdate = this.viewerSelection.startSelectionUpdate()) {
-			final Collection<ISelectableController> controllers = this.selectableFinder.findControllersIn(x, y, width,
-					height);
-			final Set<Object> objects = controllers.stream().map(ISelectableController::getModel)
-					.collect(Collectors.toSet());
+			final Collection<ISelectableController> controllers = this.selectableFinder.findControllersIn(x, y, width, height);
+			final Set<Object> objects = controllers.stream().map(ISelectableController::getModel).collect(Collectors.toSet());
 			if (toggle) {
 				final Set<Object> alreadySelected = new HashSet<>(this.viewerSelection.getSelectedObjects());
 				alreadySelected.retainAll(objects);

@@ -13,8 +13,7 @@ public abstract class AbstractObservingController<T extends AbstractObervableObj
 	private final T modelObj;
 	private boolean isDisposed = false;
 
-	public AbstractObservingController(final IContentManager contentManager, final IController parent,
-			final T modelObj) {
+	public AbstractObservingController(final IContentManager contentManager, final IController parent, final T modelObj) {
 		super(parent);
 		this.contentManager = contentManager;
 		this.modelObj = modelObj;

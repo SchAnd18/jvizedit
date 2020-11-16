@@ -44,8 +44,7 @@ public class DragShapeObjects implements IDragDropListener {
 			 * figures move during drag operation.
 			 */
 			this.draggedObjects.forEach(o -> {
-				final Point2D p = o.getView().sceneToLocal(x, y)
-						.subtract(o.getView().sceneToLocal(this.startX, this.startY));
+				final Point2D p = o.getView().sceneToLocal(x, y).subtract(o.getView().sceneToLocal(this.startX, this.startY));
 				o.getDragPreviewTranslate().setX(p.getX());
 				o.getDragPreviewTranslate().setY(p.getY());
 			});
@@ -61,8 +60,7 @@ public class DragShapeObjects implements IDragDropListener {
 			 * here. The refresh should be just triggerd after a command call.
 			 */
 			this.draggedObjects.forEach(o -> {
-				final Point2D p = o.getView().sceneToLocal(x, y)
-						.subtract(o.getView().sceneToLocal(this.startX, this.startY));
+				final Point2D p = o.getView().sceneToLocal(x, y).subtract(o.getView().sceneToLocal(this.startX, this.startY));
 				final ShapeObject m = o.getModel();
 				m.setX(m.getX() + p.getX());
 				m.setY(m.getY() + p.getY());

@@ -53,8 +53,7 @@ public class ControlStateMachine {
 		}
 	}
 
-	private void notifyUpdate(final ControlState oldState, final IControlStateEventHandler<?> transition,
-			final Object event) {
+	private void notifyUpdate(final ControlState oldState, final IControlStateEventHandler<?> transition, final Object event) {
 		for (final IControlStateUpdateListener listener : this.listeners) {
 			listener.controlStateChanged(oldState, this.currentState, transition, event);
 		}

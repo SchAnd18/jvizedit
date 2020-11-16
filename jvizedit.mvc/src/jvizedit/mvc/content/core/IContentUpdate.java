@@ -24,8 +24,7 @@ public interface IContentUpdate<U extends IControllerBase> {
 		return result;
 	}
 
-	public static <T> List<T> castViewTo(final Class<T> expectedType,
-			final Collection<? extends IControllerBase> controllers) {
+	public static <T> List<T> castViewTo(final Class<T> expectedType, final Collection<? extends IControllerBase> controllers) {
 		final List<T> result = new ArrayList<>(controllers.size());
 		for (final IControllerBase o : controllers) {
 			final Object view = o.getView();

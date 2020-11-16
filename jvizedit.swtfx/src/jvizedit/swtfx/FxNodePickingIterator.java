@@ -13,8 +13,8 @@ import jvizedit.mvc.IController;
 
 public class FxNodePickingIterator {
 
-	public static <T> Optional<T> findControllerOfType(final IController start, final Class<T> controllerType,
-			final double x, final double y) {
+	public static <T> Optional<T> findControllerOfType(final IController start, final Class<T> controllerType, final double x,
+			final double y) {
 		final List<T> result = new ArrayList<>(1);
 		final FxNodePickingIterator npi = new FxNodePickingIterator();
 		npi.setOnEnterNode((c, n) -> {

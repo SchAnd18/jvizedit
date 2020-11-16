@@ -12,8 +12,8 @@ public class PseudoDragEventInfo implements IDragEventInfo {
 	private final double x;
 	private final double y;
 
-	public PseudoDragEventInfo(final DragSelection dragSelection, final IWrappedEvent sourceEvent,
-			final EDiagramDragEventType type, final double x, final double y, final ISelectableController dragSource) {
+	public PseudoDragEventInfo(final DragSelection dragSelection, final IWrappedEvent sourceEvent, final EDiagramDragEventType type,
+			final double x, final double y, final ISelectableController dragSource) {
 		this.sourceEvent = sourceEvent;
 		this.dragSelection = dragSelection;
 		this.type = type;

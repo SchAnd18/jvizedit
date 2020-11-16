@@ -35,8 +35,7 @@ public class DragSelection {
 	private double currentMouseX;
 	private double currentMouseY;
 
-	public DragSelection(final ControlStateMachine cstm, final SelectOnClick usc,
-			final ISelectableFinder selectableFinder) {
+	public DragSelection(final ControlStateMachine cstm, final SelectOnClick usc, final ISelectableFinder selectableFinder) {
 		this.init = cstm.getInitState();
 		this.dragSelection = cstm.getOrCreateState(STATE_DRAG_SELECTION);
 		this.mouseDownState = usc.getMouseDownOnSelectableState();
@@ -73,12 +72,10 @@ public class DragSelection {
 
 	private final IControlStateEventHandler<IKeyEvent> abortDrag = new IControlStateEventHandler<IKeyEvent>() {
 		@Override
-		public boolean handleInputEvent(final ControlState srcState, final ControlState targetState,
-				final IKeyEvent event) {
+		public boolean handleInputEvent(final ControlState srcState, final ControlState targetState, final IKeyEvent event) {
 			final boolean escUp = event.isKeyReleased() && (event.getKey() == Key.ESCAPE);
 			if ((srcState == DragSelection.this.dragSelection) && escUp) {
-				notifyListeners(event, EDiagramDragEventType.abortDrag, DragSelection.this.currentMouseX,
-						DragSelection.this.currentMouseY);
+				notifyListeners(event, EDiagramDragEventType.abortDrag, DragSelection.this.currentMouseX, DragSelection.this.currentMouseY);
 				return true;
 			}
 			return false;
@@ -93,8 +90,7 @@ public class DragSelection {
 	private final IControlStateEventHandler<IMouseEvent> performDrag = new IControlStateEventHandler<IMouseEvent>() {
 
 		@Override
-		public boolean handleInputEvent(final ControlState srcState, final ControlState targetState,
-				final IMouseEvent event) {
+		public boolean handleInputEvent(final ControlState srcState, final ControlState targetState, final IMouseEvent event) {
 			final boolean isMouseUp = (event.getButton() == MouseButton.LEFT) && event.isButtonUp();
 			final boolean isDragEvent = (event.getButton() == MouseButton.LEFT) && event.isDrag();
 			final double x = event.getX();
@@ -103,19 +99,15 @@ public class DragSelection {
 			DragSelection.this.currentMouseY = y;
 
 			EDiagramDragEventType eventType = null;
-			if ((srcState == DragSelection.this.mouseDownState) && (targetState == DragSelection.this.dragSelection)
-					&& isDragEvent) {
-				final SelectionUpdate update = event.isControlDown() ? SelectionUpdate.TOGGLE
-						: SelectionUpdate.SET_IF_NOT_SELECTED;
+			if ((srcState == DragSelection.this.mouseDownState) && (targetState == DragSelection.this.dragSelection) && isDragEvent) {
+				final SelectionUpdate update = event.isControlDown() ? SelectionUpdate.TOGGLE : SelectionUpdate.SET_IF_NOT_SELECTED;
 				DragSelection.this.selectOnClick.updateSelection(event, srcState, update);
 				DragSelection.this.currentSource = DragSelection.this.selectableFinder.findControllerAt(x, y, event);
 				eventType = EDiagramDragEventType.startDrag;
 				DragSelection.this.isPseudoTransferAccepted = false;
-			} else if ((srcState == DragSelection.this.dragSelection)
-					&& (targetState == DragSelection.this.dragSelection) && isDragEvent) {
+			} else if ((srcState == DragSelection.this.dragSelection) && (targetState == DragSelection.this.dragSelection) && isDragEvent) {
 				eventType = EDiagramDragEventType.continueDrag;
-			} else if ((srcState == DragSelection.this.dragSelection) && (targetState == DragSelection.this.init)
-					&& isMouseUp) {
+			} else if ((srcState == DragSelection.this.dragSelection) && (targetState == DragSelection.this.init) && isMouseUp) {
 				if (DragSelection.this.isPseudoTransferAccepted) {
 					eventType = EDiagramDragEventType.drop;
 				} else {
@@ -137,10 +129,8 @@ public class DragSelection {
 		}
 	};
 
-	private void notifyListeners(final IWrappedEvent srcEvent, final EDiagramDragEventType type, final double x,
-			final double y) {
-		final PseudoDragEventInfo dragEventInfo = new PseudoDragEventInfo(this, srcEvent, type, x, y,
-				this.currentSource);
+	private void notifyListeners(final IWrappedEvent srcEvent, final EDiagramDragEventType type, final double x, final double y) {
+		final PseudoDragEventInfo dragEventInfo = new PseudoDragEventInfo(this, srcEvent, type, x, y, this.currentSource);
 		for (final IDragDropListener l : this.listeners) {
 			l.dragEvent(dragEventInfo);
 		}

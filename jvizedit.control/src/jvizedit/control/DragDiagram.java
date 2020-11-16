@@ -41,8 +41,7 @@ public class DragDiagram implements IControlStateEventHandler<IMouseEvent> {
 	}
 
 	@Override
-	public boolean handleInputEvent(final ControlState srcState, final ControlState targetState,
-			final IMouseEvent event) {
+	public boolean handleInputEvent(final ControlState srcState, final ControlState targetState, final IMouseEvent event) {
 
 		final boolean isDrag = event.isDrag() && (event.getButton() == MouseButton.RIGHT);
 		if ((srcState == this.rightMouseDown) && (targetState == this.dragDiagram) && isDrag) {

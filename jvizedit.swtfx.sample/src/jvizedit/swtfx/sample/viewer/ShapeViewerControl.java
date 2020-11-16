@@ -81,8 +81,7 @@ public class ShapeViewerControl {
 			final SelectOnClick selectOnClick = new SelectOnClick(cstm, selectableFinder);
 
 			this.viewerSelection = new ViewerSelection(this.modelContent);
-			final ViewerSelectionUpdater selectionUpdater = new ViewerSelectionUpdater(this.viewerSelection,
-					selectableFinder);
+			final ViewerSelectionUpdater selectionUpdater = new ViewerSelectionUpdater(this.viewerSelection, selectableFinder);
 			selectOnClick.addSelectOnClickListener(selectionUpdater);
 
 			// allow pseudo drag and drop of diagram elements
@@ -92,8 +91,7 @@ public class ShapeViewerControl {
 			final DragExternal dragExternal = new DragExternal(cstm);
 
 			final SelectionAreaOnDrag selectionAreaOnDrag = new SelectionAreaOnDrag(cstm, selectOnClick);
-			final SelectionAreaEffect selecationAreaEffect = new SelectionAreaEffect(fxRoot.getFeedbackLayer(),
-					parent.getDisplay());
+			final SelectionAreaEffect selecationAreaEffect = new SelectionAreaEffect(fxRoot.getFeedbackLayer(), parent.getDisplay());
 			selectionAreaOnDrag.addSelectionAreaListener(selecationAreaEffect);
 			selectionAreaOnDrag.addSelectionAreaListener(selectionUpdater);
 

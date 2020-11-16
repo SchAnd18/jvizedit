@@ -18,8 +18,8 @@ public interface IControllerBase {
 		if (expectedType.isInstance(view)) {
 			return expectedType.cast(view);
 		} else {
-			throw new IllegalStateException("Unexpected view type. Expected Type: " + expectedType.getName()
-					+ " Actual Type: " + view.getClass().getName() + ".");
+			throw new IllegalStateException(
+					"Unexpected view type. Expected Type: " + expectedType.getName() + " Actual Type: " + view.getClass().getName() + ".");
 		}
 
 	}

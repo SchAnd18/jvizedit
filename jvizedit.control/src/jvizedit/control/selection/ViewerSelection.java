@@ -71,9 +71,8 @@ public class ViewerSelection implements IContentChangeListener {
 	}
 
 	public List<ISelectableController> getSelectedControllers() {
-		return this.selectedObjects.stream().map(this.modelContent::getController)
-				.filter(ISelectableController.class::isInstance).map(ISelectableController.class::cast)
-				.collect(Collectors.toList());
+		return this.selectedObjects.stream().map(this.modelContent::getController).filter(ISelectableController.class::isInstance)
+				.map(ISelectableController.class::cast).collect(Collectors.toList());
 	}
 
 	public <T> List<T> getSelectedControllers(final Class<T> controllerType) {
@@ -155,19 +154,17 @@ public class ViewerSelection implements IContentChangeListener {
 			this.addToSelection.forEach(o -> {
 				final boolean added = ViewerSelection.this.selectedObjects.add(o);
 				if (added) {
-					ViewerSelection.this.modelContent.getControllerOfType(ISelectableController.class, o)
-							.ifPresent(c -> {
-								c.setSelectionStatus(true);
-							});
+					ViewerSelection.this.modelContent.getControllerOfType(ISelectableController.class, o).ifPresent(c -> {
+						c.setSelectionStatus(true);
+					});
 				}
 			});
 			this.removeFromSelection.forEach(o -> {
 				final boolean removed = ViewerSelection.this.selectedObjects.remove(o);
 				if (removed) {
-					ViewerSelection.this.modelContent.getControllerOfType(ISelectableController.class, o)
-							.ifPresent(c -> {
-								c.setSelectionStatus(false);
-							});
+					ViewerSelection.this.modelContent.getControllerOfType(ISelectableController.class, o).ifPresent(c -> {
+						c.setSelectionStatus(false);
+					});
 				}
 			});
 			notifySelectionChange();

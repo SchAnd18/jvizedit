@@ -40,12 +40,10 @@ public class OpenContextMenu implements IControlStateEventHandler<IMouseEvent> {
 	}
 
 	@Override
-	public boolean handleInputEvent(final ControlState srcState, final ControlState targetState,
-			final IMouseEvent event) {
+	public boolean handleInputEvent(final ControlState srcState, final ControlState targetState, final IMouseEvent event) {
 		final boolean mouseUp = event.isButtonUp() && (event.getButton() == MouseButton.RIGHT);
 		if ((srcState == this.rightMouseDown) && (targetState == this.initState) && mouseUp) {
-			final ISelectableController selectableController = this.controllerFinder.findControllerAt(event.getX(),
-					event.getY(), event);
+			final ISelectableController selectableController = this.controllerFinder.findControllerAt(event.getX(), event.getY(), event);
 			final double x = event.getX();
 			final double y = event.getY();
 			this.listeners.forEach(listener -> {

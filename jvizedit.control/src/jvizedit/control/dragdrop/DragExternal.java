@@ -33,12 +33,10 @@ public class DragExternal implements IControlStateEventHandler<IDragEvent> {
 	}
 
 	@Override
-	public boolean handleInputEvent(final ControlState srcState, final ControlState targetState,
-			final IDragEvent event) {
+	public boolean handleInputEvent(final ControlState srcState, final ControlState targetState, final IDragEvent event) {
 		final DragEventType dragEventType = event.getType();
 
-		final boolean potDragEnterEvent = (dragEventType == DragEventType.dragEnter)
-				|| (dragEventType == DragEventType.dragOver);
+		final boolean potDragEnterEvent = (dragEventType == DragEventType.dragEnter) || (dragEventType == DragEventType.dragOver);
 		if ((srcState == this.init) && (targetState == this.dragExternal) && potDragEnterEvent) {
 			notifyListeners(EDiagramDragEventType.startDrag, event);
 			return true;
@@ -53,8 +51,7 @@ public class DragExternal implements IControlStateEventHandler<IDragEvent> {
 				return true;
 			}
 		}
-		if ((srcState == this.dragExternal) && (targetState == this.init)
-				&& (dragEventType == DragEventType.dragExit)) {
+		if ((srcState == this.dragExternal) && (targetState == this.init) && (dragEventType == DragEventType.dragExit)) {
 			notifyListeners(EDiagramDragEventType.abortDrag, event);
 			return true;
 		}

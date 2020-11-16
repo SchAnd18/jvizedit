@@ -35,8 +35,7 @@ public class ControlState {
 		return -1;
 	}
 
-	private <T> boolean tryHandleEvent(final ControlState targetState, final IControlStateEventHandler<T> transition,
-			final Object event) {
+	private <T> boolean tryHandleEvent(final ControlState targetState, final IControlStateEventHandler<T> transition, final Object event) {
 		final Class<T> expectedEventType = transition.getExpectedEventType();
 		if (!expectedEventType.isInstance(event)) {
 			return false;

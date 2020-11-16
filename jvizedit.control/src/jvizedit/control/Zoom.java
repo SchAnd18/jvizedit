@@ -22,8 +22,7 @@ public class Zoom implements IControlStateEventHandler<IMouseWheelEvent> {
 	}
 
 	@Override
-	public boolean handleInputEvent(final ControlState srcState, final ControlState targetState,
-			final IMouseWheelEvent event) {
+	public boolean handleInputEvent(final ControlState srcState, final ControlState targetState, final IMouseWheelEvent event) {
 		if ((srcState == this.initState) && (targetState == this.initState)) {
 			zoom(event);
 			return true;

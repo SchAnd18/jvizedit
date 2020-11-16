@@ -8,8 +8,7 @@ import jvizedit.control.core.events.IMouseEvent;
 
 public class FxMouseEvent implements IMouseEvent {
 
-	public static FilteredEventHandler<MouseEvent> addMouseEventFilter(final Scene scene,
-			final ControlStateMachine cstm) {
+	public static FilteredEventHandler<MouseEvent> addMouseEventFilter(final Scene scene, final ControlStateMachine cstm) {
 		final EventHandler<MouseEvent> handler = event -> {
 			final MouseEvent mouseEvent = event;
 			final FxMouseEvent fxKeyEvent = new FxMouseEvent(mouseEvent);

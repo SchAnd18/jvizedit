@@ -55,8 +55,7 @@ public class DragShapeTypes implements IDragDropListener {
 
 			shapeObject.setShapeType(shapeType);
 
-			final String color = "rgb(" + random.nextInt(255) + "," + random.nextInt(255) + "," + random.nextInt(255)
-					+ ")";
+			final String color = "rgb(" + random.nextInt(255) + "," + random.nextInt(255) + "," + random.nextInt(255) + ")";
 			shapeObject.setColor(color);
 
 			final ShapesRoot root = (ShapesRoot) rootController.getModel();

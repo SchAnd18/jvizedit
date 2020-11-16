@@ -20,10 +20,8 @@ public class SelectionAreaEffect implements ISelectionAreaListener {
 
 	public SelectionAreaEffect(final Group selectionLayerParent, final Display display) {
 		final org.eclipse.swt.graphics.Color swtColor = display.getSystemColor(SWT.COLOR_LIST_SELECTION);
-		final Color cFill = new Color((swtColor.getRed() / 255d), (swtColor.getGreen() / 255d),
-				(swtColor.getBlue() / 255d), 0.3);
-		final Color cStroke = new Color((swtColor.getRed() / 255d), (swtColor.getGreen() / 255d),
-				(swtColor.getBlue() / 255d), 1);
+		final Color cFill = new Color((swtColor.getRed() / 255d), (swtColor.getGreen() / 255d), (swtColor.getBlue() / 255d), 0.3);
+		final Color cStroke = new Color((swtColor.getRed() / 255d), (swtColor.getGreen() / 255d), (swtColor.getBlue() / 255d), 1);
 
 		this.selectionLayerParent = selectionLayerParent;
 		this.selectionRectangle = new Rectangle(1, 1);
@@ -32,8 +30,8 @@ public class SelectionAreaEffect implements ISelectionAreaListener {
 	}
 
 	@Override
-	public void onSelectionArea(final ESelectionAreaEvent event, final double x, final double y, final double width,
-			final double height, final boolean toggle) {
+	public void onSelectionArea(final ESelectionAreaEvent event, final double x, final double y, final double width, final double height,
+			final boolean toggle) {
 		switch (event) {
 		case init:
 			this.selectionLayerParent.getChildren().add(this.selectionRectangle);
@@ -46,8 +44,7 @@ public class SelectionAreaEffect implements ISelectionAreaListener {
 
 			if (this.translateBorderSize) {
 				try {
-					final double w = this.selectionLayerParent.getLocalToSceneTransform().inverseDeltaTransform(1, 1)
-							.getX();
+					final double w = this.selectionLayerParent.getLocalToSceneTransform().inverseDeltaTransform(1, 1).getX();
 					this.selectionRectangle.setStrokeWidth(w);
 				} catch (final NonInvertibleTransformException e) {
 					// this is a minor problem that just should be logged

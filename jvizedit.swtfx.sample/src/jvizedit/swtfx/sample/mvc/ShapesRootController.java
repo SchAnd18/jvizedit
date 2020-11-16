@@ -18,8 +18,7 @@ public class ShapesRootController extends AbstractObservingController<ShapesRoot
 
 	private final Group group;
 
-	public ShapesRootController(final IContentManager contentManager, final IController parent,
-			final ShapesRoot shapesRoot) {
+	public ShapesRootController(final IContentManager contentManager, final IController parent, final ShapesRoot shapesRoot) {
 		super(contentManager, parent, shapesRoot);
 
 		this.group = new Group();

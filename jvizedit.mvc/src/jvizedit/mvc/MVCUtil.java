@@ -6,8 +6,7 @@ import java.util.Set;
 
 public class MVCUtil {
 
-	public static <T> Optional<T> findCommonParentOfType(final IController c1, final IController c2,
-			final Class<T> controllerType) {
+	public static <T> Optional<T> findCommonParentOfType(final IController c1, final IController c2, final Class<T> controllerType) {
 		final Set<T> allParentEdgeContainersOfC1 = new HashSet<>();
 		IController parent = c1.getParent();
 		while (parent != null) {

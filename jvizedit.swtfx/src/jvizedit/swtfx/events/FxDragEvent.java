@@ -16,8 +16,7 @@ import jvizedit.control.dragdrop.EDragDropTransfer;
 
 public class FxDragEvent implements IDragEvent {
 
-	public static FilteredEventHandler<DragEvent> addDragEventFilter(final Scene scene,
-			final ControlStateMachine cstm) {
+	public static FilteredEventHandler<DragEvent> addDragEventFilter(final Scene scene, final ControlStateMachine cstm) {
 		final EventHandler<DragEvent> handler = event -> {
 			final DragEvent dragEvent = event;
 			final FxDragEvent fxKeyEvent = new FxDragEvent(dragEvent);

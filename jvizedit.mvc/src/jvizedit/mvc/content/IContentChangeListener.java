@@ -23,16 +23,14 @@ public interface IContentChangeListener {
 		Set<IController> getRelocatedControllers();
 
 		default List<Object> getAddedModelObjects() {
-			final Set<Object> removedObjects = getRemovedControllers().stream().map(IController::getModel)
-					.collect(Collectors.toSet());
+			final Set<Object> removedObjects = getRemovedControllers().stream().map(IController::getModel).collect(Collectors.toSet());
 			final List<Object> newObjects = getAddedControllers().stream().map(IController::getModel)
 					.filter(m -> !removedObjects.contains(m)).collect(Collectors.toList());
 			return newObjects;
 		}
 
 		default List<Object> getRemovedModelObjects() {
-			final Set<Object> addedObjects = getAddedControllers().stream().map(IController::getModel)
-					.collect(Collectors.toSet());
+			final Set<Object> addedObjects = getAddedControllers().stream().map(IController::getModel).collect(Collectors.toSet());
 			final List<Object> removedObjects = getRemovedControllers().stream().map(IController::getModel)
 					.filter(m -> !addedObjects.contains(m)).collect(Collectors.toList());
 			return removedObjects;
@@ -51,8 +49,7 @@ public interface IContentChangeListener {
 		// TODO: relocated controllers should be a map to see old parents
 		private final Set<IController> relocatedControllers;
 
-		public ContentChange(final Set<IController> added, final Set<IController> removed,
-				final Set<IController> relocatedControllers) {
+		public ContentChange(final Set<IController> added, final Set<IController> removed, final Set<IController> relocatedControllers) {
 			this.addedControllers = added;
 			this.removedControllers = removed;
 			this.relocatedControllers = relocatedControllers;
