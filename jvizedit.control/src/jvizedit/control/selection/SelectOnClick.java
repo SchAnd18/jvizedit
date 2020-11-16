@@ -26,15 +26,15 @@ public class SelectOnClick implements IControlStateEventHandler<IMouseEvent> {
 	public SelectOnClick(final ControlStateMachine cstm, final ISelectableFinder controllerFinder) {
 		this.controllerFinder = controllerFinder;
 
-		init = cstm.getInitState();
-		mouseDownOnSelectable = cstm.getOrCreateState(STATE_LEFT_MOUSE_DOWN_ON_SELECTABLE);
-		mouseDown = cstm.getOrCreateState(STATE_LEFT_MOUSE_DOWN);
+		this.init = cstm.getInitState();
+		this.mouseDownOnSelectable = cstm.getOrCreateState(STATE_LEFT_MOUSE_DOWN_ON_SELECTABLE);
+		this.mouseDown = cstm.getOrCreateState(STATE_LEFT_MOUSE_DOWN);
 
-		init.addStateTransition(mouseDownOnSelectable, this);
-		init.addStateTransition(mouseDown, this);
+		this.init.addStateTransition(this.mouseDownOnSelectable, this);
+		this.init.addStateTransition(this.mouseDown, this);
 
-		mouseDownOnSelectable.addStateTransition(init, this);
-		mouseDown.addStateTransition(init, this);
+		this.mouseDownOnSelectable.addStateTransition(this.init, this);
+		this.mouseDown.addStateTransition(this.init, this);
 	}
 
 	@Override
@@ -43,32 +43,33 @@ public class SelectOnClick implements IControlStateEventHandler<IMouseEvent> {
 	}
 
 	public void addSelectOnClickListener(final ISelectOnClickListener listener) {
-		listeners.add(listener);
+		this.listeners.add(listener);
 	}
 
 	public void removeSelectOnClickListener(final ISelectOnClickListener listener) {
-		listeners.remove(listener);
+		this.listeners.remove(listener);
 	}
 
 	public ControlState getMouseDownOnSelectableState() {
-		return mouseDownOnSelectable;
+		return this.mouseDownOnSelectable;
 	}
 
 	public ControlState getMouseDownState() {
-		return mouseDown;
+		return this.mouseDown;
 	}
 
-	public boolean updateSelection(final IMouseEvent mouseEvent, ControlState srcState, final SelectionUpdate update) {
-		if (srcState == mouseDownOnSelectable) {
-			if (currentSelectable != null) {
-				for (ISelectOnClickListener listener : this.listeners) {
-					listener.updateSelection(mouseEvent, currentSelectable, update);
+	public boolean updateSelection(final IMouseEvent mouseEvent, final ControlState srcState,
+			final SelectionUpdate update) {
+		if (srcState == this.mouseDownOnSelectable) {
+			if (this.currentSelectable != null) {
+				for (final ISelectOnClickListener listener : this.listeners) {
+					listener.updateSelection(mouseEvent, this.currentSelectable, update);
 				}
 			}
 			return true;
-		} else if (srcState == mouseDown) {
+		} else if (srcState == this.mouseDown) {
 			if (update == SelectionUpdate.SET) {
-				for (ISelectOnClickListener listener : this.listeners) {
+				for (final ISelectOnClickListener listener : this.listeners) {
 					listener.clearSelection(mouseEvent);
 				}
 			}
@@ -79,24 +80,25 @@ public class SelectOnClick implements IControlStateEventHandler<IMouseEvent> {
 	}
 
 	@Override
-	public boolean handleInputEvent(ControlState srcState, ControlState targetState, IMouseEvent event) {
+	public boolean handleInputEvent(final ControlState srcState, final ControlState targetState,
+			final IMouseEvent event) {
 
-		if (srcState == init && event.isButtonDown() && event.getButton() == MouseButton.LEFT) {
-			final ISelectableController controller = controllerFinder.findControllerAt(event.getX(), event.getY(),
+		if ((srcState == this.init) && event.isButtonDown() && (event.getButton() == MouseButton.LEFT)) {
+			final ISelectableController controller = this.controllerFinder.findControllerAt(event.getX(), event.getY(),
 					event);
-			if (targetState == mouseDownOnSelectable) {
+			if (targetState == this.mouseDownOnSelectable) {
 				if (controller != null) {
 					this.currentSelectable = controller;
 					return true;
 				} else {
 					return false;
 				}
-			} else if (targetState == mouseDown) {
+			} else if (targetState == this.mouseDown) {
 				return controller == null;
 			}
 		}
 
-		if (event.isButtonUp() && event.getButton() == MouseButton.LEFT) {
+		if (event.isButtonUp() && (event.getButton() == MouseButton.LEFT)) {
 			final SelectionUpdate update = event.isControlDown() ? SelectionUpdate.TOGGLE : SelectionUpdate.SET;
 			return updateSelection(event, srcState, update);
 		}

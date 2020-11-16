@@ -9,19 +9,19 @@ public class ShapesRoot extends AbstractObervableObject {
 	private final Set<ShapeObject> shapeObjects = new LinkedHashSet<>();
 
 	public void addShape(final ShapeObject shapeObject) {
-		if (shapeObjects.add(shapeObject)) {
+		if (this.shapeObjects.add(shapeObject)) {
 			super.notifyChange();
 		}
 	}
 
 	public void removeShape(final ShapeObject shapeObject) {
-		if (shapeObjects.remove(shapeObject)) {
+		if (this.shapeObjects.remove(shapeObject)) {
 			super.notifyChange();
 		}
 	}
 
 	public Set<ShapeObject> getShapeObjects() {
-		return Collections.unmodifiableSet(shapeObjects);
+		return Collections.unmodifiableSet(this.shapeObjects);
 	}
 
 }

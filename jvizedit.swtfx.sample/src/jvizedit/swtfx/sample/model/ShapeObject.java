@@ -13,64 +13,64 @@ public class ShapeObject extends AbstractObervableObject {
 	private String color;
 
 	public double getHeight() {
-		return height;
+		return this.height;
 	}
 
-	public void setHeight(double height) {
+	public void setHeight(final double height) {
 		this.height = height;
 		super.notifyChange();
 	}
 
 	public double getWidth() {
-		return width;
+		return this.width;
 	}
 
-	public void setWidth(double width) {
+	public void setWidth(final double width) {
 		this.width = width;
 		super.notifyChange();
 	}
 
 	public double getX() {
-		return x;
+		return this.x;
 	}
 
-	public void setX(double x) {
+	public void setX(final double x) {
 		this.x = x;
 		super.notifyChange();
 	}
 
 	public double getY() {
-		return y;
+		return this.y;
 	}
 
-	public void setY(double y) {
+	public void setY(final double y) {
 		this.y = y;
 		super.notifyChange();
 	}
 
 	public ShapeType getShapeType() {
-		return shapeType;
+		return this.shapeType;
 	}
 
-	public void setShapeType(ShapeType shapeType) {
+	public void setShapeType(final ShapeType shapeType) {
 		this.shapeType = Objects.requireNonNull(shapeType);
 		super.notifyChange();
 	}
 
 	public String getText() {
-		return text;
+		return this.text;
 	}
 
-	public void setText(String text) {
+	public void setText(final String text) {
 		this.text = text;
 		super.notifyChange();
 	}
 
 	public String getColor() {
-		return color;
+		return this.color;
 	}
 
-	public void setColor(String color) {
+	public void setColor(final String color) {
 		this.color = color;
 		super.notifyChange();
 	}

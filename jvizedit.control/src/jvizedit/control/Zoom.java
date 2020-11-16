@@ -11,8 +11,8 @@ public class Zoom implements IControlStateEventHandler<IMouseWheelEvent> {
 	private final ControlState initState;
 
 	public Zoom(final ControlStateMachine cstm, final INavigableArea modelLayer) {
-		initState = cstm.getInitState();
-		initState.addStateTransition(initState, this);
+		this.initState = cstm.getInitState();
+		this.initState.addStateTransition(this.initState, this);
 		this.modelLayer = modelLayer;
 	}
 
@@ -22,8 +22,9 @@ public class Zoom implements IControlStateEventHandler<IMouseWheelEvent> {
 	}
 
 	@Override
-	public boolean handleInputEvent(ControlState srcState, ControlState targetState, IMouseWheelEvent event) {
-		if (srcState == initState && targetState == initState) {
+	public boolean handleInputEvent(final ControlState srcState, final ControlState targetState,
+			final IMouseWheelEvent event) {
+		if ((srcState == this.initState) && (targetState == this.initState)) {
 			zoom(event);
 			return true;
 		}
@@ -32,7 +33,7 @@ public class Zoom implements IControlStateEventHandler<IMouseWheelEvent> {
 
 	private void zoom(final IMouseWheelEvent mouseWheelEvent) {
 
-		final double scale = modelLayer.getScale();
+		final double scale = this.modelLayer.getScale();
 		final double factor = 1d + mouseWheelEvent.wheelCount();
 
 		double newScale = Math.max(scale * factor, 0.0005);
@@ -40,11 +41,11 @@ public class Zoom implements IControlStateEventHandler<IMouseWheelEvent> {
 		if (newScale == scale) {
 			return;
 		}
-		modelLayer.setScale(newScale);
+		this.modelLayer.setScale(newScale);
 
 		// translate x
 		final double mouseX = mouseWheelEvent.getX();
-		final double x = modelLayer.getOffsetX();
+		final double x = this.modelLayer.getOffsetX();
 		final double xDiff = x - mouseX;
 		final double newXDiff = xDiff * factor;
 		final double xCorrection = newXDiff - xDiff;
@@ -52,12 +53,12 @@ public class Zoom implements IControlStateEventHandler<IMouseWheelEvent> {
 
 		// translate y
 		final double mouseY = mouseWheelEvent.getY();
-		final double y = modelLayer.getOffsetY();
+		final double y = this.modelLayer.getOffsetY();
 		final double yDiff = y - mouseY;
 		final double newYDiff = yDiff * factor;
 		final double yCorrection = newYDiff - yDiff;
 		final double newY = y + yCorrection;
 
-		modelLayer.setOffset(newX, newY);
+		this.modelLayer.setOffset(newX, newY);
 	}
 }

@@ -18,7 +18,7 @@ public class FxKeyEvent implements IKeyEvent {
 				event.consume();
 			}
 		};
-		final FilteredEventHandler<KeyEvent> filtered = new FilteredEventHandler<KeyEvent>(handler);
+		final FilteredEventHandler<KeyEvent> filtered = new FilteredEventHandler<>(handler);
 		scene.addEventFilter(KeyEvent.ANY, filtered);
 		return filtered;
 	}
@@ -31,22 +31,22 @@ public class FxKeyEvent implements IKeyEvent {
 
 	@Override
 	public KeyEvent getRealEvent() {
-		return fxEvent;
+		return this.fxEvent;
 	}
 
 	@Override
 	public boolean isKeyReleased() {
-		return fxEvent.getEventType() == KeyEvent.KEY_RELEASED;
+		return this.fxEvent.getEventType() == KeyEvent.KEY_RELEASED;
 	}
 
 	@Override
 	public boolean isKeyPressed() {
-		return fxEvent.getEventType() == KeyEvent.KEY_PRESSED;
+		return this.fxEvent.getEventType() == KeyEvent.KEY_PRESSED;
 	}
 
 	@Override
 	public Key getKey() {
-		if (fxEvent.getCode() == KeyCode.ESCAPE) {
+		if (this.fxEvent.getCode() == KeyCode.ESCAPE) {
 			return Key.ESCAPE;
 		}
 		return Key.UNKNOWN;

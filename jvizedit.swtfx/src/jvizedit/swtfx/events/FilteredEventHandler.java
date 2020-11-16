@@ -17,20 +17,20 @@ public class FilteredEventHandler<T extends Event> implements EventHandler<T> {
 	}
 
 	@Override
-	public void handle(T event) {
-		for (Function<T, Boolean> filter : this.filters) {
+	public void handle(final T event) {
+		for (final Function<T, Boolean> filter : this.filters) {
 			if (!filter.apply(event)) {
 				return;
 			}
 		}
-		wrapped.handle(event);
+		this.wrapped.handle(event);
 	}
 
-	public void addFilter(Function<T, Boolean> filter) {
+	public void addFilter(final Function<T, Boolean> filter) {
 		this.filters.add(filter);
 	}
 
-	public void removeFilter(Function<T, Boolean> filter) {
+	public void removeFilter(final Function<T, Boolean> filter) {
 		this.filters.remove(filter);
 	}
 }

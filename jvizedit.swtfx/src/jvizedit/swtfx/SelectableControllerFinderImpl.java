@@ -27,7 +27,7 @@ public class SelectableControllerFinderImpl implements ISelectableFinder {
 		this.objectContent = objectContent;
 	}
 
-	protected boolean isSelectable(IController controller) {
+	protected boolean isSelectable(final IController controller) {
 		if (!(controller instanceof ISelectableController)) {
 			return false;
 		}
@@ -36,7 +36,7 @@ public class SelectableControllerFinderImpl implements ISelectableFinder {
 	}
 
 	@Override
-	public ISelectableController findControllerAt(double x, double y, IMouseEvent mouseDown) {
+	public ISelectableController findControllerAt(final double x, final double y, final IMouseEvent mouseDown) {
 		if (!(mouseDown instanceof FxMouseEvent)) {
 			throw new IllegalArgumentException("Unexpected mouse event implementation!");
 		}
@@ -52,10 +52,11 @@ public class SelectableControllerFinderImpl implements ISelectableFinder {
 	}
 
 	@Override
-	public Collection<ISelectableController> findControllersIn(double x, double y, double width, double height) {
+	public Collection<ISelectableController> findControllersIn(final double x, final double y, final double width,
+			final double height) {
 		final Bounds selectionBoundsScene = new BoundingBox(x, y, width, height);
 		final List<ISelectableController> result = new ArrayList<>();
-		final List<IController> root = Collections.singletonList(objectContent.getRootController());
+		final List<IController> root = Collections.singletonList(this.objectContent.getRootController());
 		findInBounds(root, selectionBoundsScene, result);
 		return result;
 	}
@@ -66,7 +67,7 @@ public class SelectableControllerFinderImpl implements ISelectableFinder {
 	 * tree In an editor where selection on different layers is allowed at the same
 	 * time, this might be ok. In an editor that only allows selection on one
 	 * defined layer in the node tree, this might be far to expensive.
-	 * 
+	 *
 	 * Possible solution: Currently there is the flag
 	 * ISelectableController::isSelectable(). When it is false and the controller
 	 * has children it goes down the tree and looks for potentially further
@@ -81,12 +82,12 @@ public class SelectableControllerFinderImpl implements ISelectableFinder {
 		// it is assumed that many children are contained in the same parent node,
 		// therefore we cache the calculated selection bounds for the parents
 		final Map<Parent, Bounds> selectionBoundsInParentMap = new HashMap<>();
-		for (IController child : currentChildren) {
+		for (final IController child : currentChildren) {
 
 			final boolean isSelectable = isSelectable(child);
 			final boolean hasChildren = child.hasControllerChildren();
 
-			if (isSelectable == false && hasChildren == false) {
+			if ((isSelectable == false) && (hasChildren == false)) {
 				continue;
 			}
 
@@ -118,10 +119,11 @@ public class SelectableControllerFinderImpl implements ISelectableFinder {
 	}
 
 	@Override
-	public Collection<ISelectableController> findControllersIntersecting(int x, int y, int width, int height) {
+	public Collection<ISelectableController> findControllersIntersecting(final int x, final int y, final int width,
+			final int height) {
 		final Bounds selectionBoundsScene = new BoundingBox(x, y, width, height);
 		final List<ISelectableController> result = new ArrayList<>();
-		final List<IController> root = Collections.singletonList(objectContent.getRootController());
+		final List<IController> root = Collections.singletonList(this.objectContent.getRootController());
 		findIntersectionsWithBounds(root, selectionBoundsScene, result);
 		return result;
 	}
@@ -133,12 +135,12 @@ public class SelectableControllerFinderImpl implements ISelectableFinder {
 		// it is assumed that many children are contained in the same parent node,
 		// therefore we cache the calculated selection bounds for the parents
 		final Map<Parent, Bounds> selectionBoundsInParentMap = new HashMap<>();
-		for (IController child : currentChildren) {
+		for (final IController child : currentChildren) {
 
 			final boolean isSelectable = isSelectable(child);
 			final boolean hasChildren = child.hasControllerChildren();
 
-			if (isSelectable == false && hasChildren == false) {
+			if ((isSelectable == false) && (hasChildren == false)) {
 				continue;
 			}
 

@@ -18,15 +18,15 @@ public class OpenContextMenu implements IControlStateEventHandler<IMouseEvent> {
 	private final ControlState initState;
 
 	public OpenContextMenu(final ControlStateMachine cstm) {
-		rightMouseDown = cstm.getOrCreateState(STATE_RIGHT_MOUSE_DOWN);
-		initState = cstm.getInitState();
+		this.rightMouseDown = cstm.getOrCreateState(STATE_RIGHT_MOUSE_DOWN);
+		this.initState = cstm.getInitState();
 
-		initState.addStateTransition(rightMouseDown, this);
-		rightMouseDown.addStateTransition(initState, this);
+		this.initState.addStateTransition(this.rightMouseDown, this);
+		this.rightMouseDown.addStateTransition(this.initState, this);
 	}
 
 	public ControlState getRightMouseDownState() {
-		return rightMouseDown;
+		return this.rightMouseDown;
 	}
 
 	@Override
@@ -35,9 +35,10 @@ public class OpenContextMenu implements IControlStateEventHandler<IMouseEvent> {
 	}
 
 	@Override
-	public boolean handleInputEvent(ControlState srcState, ControlState targetState, IMouseEvent event) {
-		final boolean mouseUp = event.isButtonUp() && event.getButton() == MouseButton.RIGHT;
-		if (srcState == rightMouseDown && targetState == initState && mouseUp) {
+	public boolean handleInputEvent(final ControlState srcState, final ControlState targetState,
+			final IMouseEvent event) {
+		final boolean mouseUp = event.isButtonUp() && (event.getButton() == MouseButton.RIGHT);
+		if ((srcState == this.rightMouseDown) && (targetState == this.initState) && mouseUp) {
 			final double x = event.getX();
 			final double y = event.getY();
 			this.listeners.forEach(i -> {
@@ -46,8 +47,8 @@ public class OpenContextMenu implements IControlStateEventHandler<IMouseEvent> {
 			return true;
 		}
 
-		final boolean mouseDown = event.isButtonDown() && event.getButton() == MouseButton.RIGHT;
-		if (srcState == initState && targetState == rightMouseDown && mouseDown) {
+		final boolean mouseDown = event.isButtonDown() && (event.getButton() == MouseButton.RIGHT);
+		if ((srcState == this.initState) && (targetState == this.rightMouseDown) && mouseDown) {
 			return true;
 		}
 		return false;

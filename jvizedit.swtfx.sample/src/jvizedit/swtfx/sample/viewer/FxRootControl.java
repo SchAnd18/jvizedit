@@ -20,37 +20,37 @@ public class FxRootControl implements IContentChangeListener, INavigableArea {
 	private Node currentRootControllerNode;
 
 	public FxRootControl() {
-		this.root.getTransforms().addAll(translate, scale);
+		this.root.getTransforms().addAll(this.translate, this.scale);
 		this.scene = new Scene(this.root);
-		this.root.getChildren().add(feedbackLayer);
+		this.root.getChildren().add(this.feedbackLayer);
 	}
 
 	public Scene getScene() {
-		return scene;
+		return this.scene;
 	}
 
 	public Group getFeedbackLayer() {
-		return feedbackLayer;
+		return this.feedbackLayer;
 	}
 
 	@Override
-	public void setOffset(double x, double y) {
-		translate.setX(x);
-		translate.setY(y);
+	public void setOffset(final double x, final double y) {
+		this.translate.setX(x);
+		this.translate.setY(y);
 	}
 
 	@Override
 	public double getOffsetX() {
-		return translate.getX();
+		return this.translate.getX();
 	}
 
 	@Override
 	public double getOffsetY() {
-		return translate.getY();
+		return this.translate.getY();
 	}
 
 	@Override
-	public void setScale(double scale) {
+	public void setScale(final double scale) {
 		this.scale.setX(scale);
 		this.scale.setY(scale);
 	}
@@ -61,13 +61,13 @@ public class FxRootControl implements IContentChangeListener, INavigableArea {
 	}
 
 	@Override
-	public void onRootChange(IController oldRootController, IController newRootController) {
-		if (currentRootControllerNode != null) {
-			this.root.getChildren().remove(currentRootControllerNode);
+	public void onRootChange(final IController oldRootController, final IController newRootController) {
+		if (this.currentRootControllerNode != null) {
+			this.root.getChildren().remove(this.currentRootControllerNode);
 		}
-		currentRootControllerNode = newRootController.getViewAsType(Node.class);
-		if (currentRootControllerNode != null) {
-			this.root.getChildren().add(0, currentRootControllerNode);
+		this.currentRootControllerNode = newRootController.getViewAsType(Node.class);
+		if (this.currentRootControllerNode != null) {
+			this.root.getChildren().add(0, this.currentRootControllerNode);
 		}
 	}
 

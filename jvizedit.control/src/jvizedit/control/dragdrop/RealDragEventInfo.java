@@ -14,37 +14,37 @@ public class RealDragEventInfo implements IDragEventInfo {
 
 	@Override
 	public EDiagramDragEventType getType() {
-		return type;
+		return this.type;
 	}
 
 	@Override
 	public EDragDropTransfer getTransfer() {
-		return sourceEvent.getTransferMode();
+		return this.sourceEvent.getTransferMode();
 	}
 
 	@Override
 	public IDragEvent getSourceEvent() {
-		return sourceEvent;
+		return this.sourceEvent;
 	}
 
 	@Override
-	public void setAcceptedTransfers(EDragDropTransfer... transfers) {
-		sourceEvent.acceptTransferModes(transfers);
+	public void setAcceptedTransfers(final EDragDropTransfer... transfers) {
+		this.sourceEvent.acceptTransferModes(transfers);
 	}
 
 	@Override
 	public boolean isAccepted() {
-		return sourceEvent.isAccepted();
+		return this.sourceEvent.isAccepted();
 	}
 
 	@Override
 	public double getX() {
-		return sourceEvent.getX();
+		return this.sourceEvent.getX();
 	}
 
 	@Override
 	public double getY() {
-		return sourceEvent.getY();
+		return this.sourceEvent.getY();
 	}
 
 }

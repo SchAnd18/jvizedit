@@ -21,30 +21,30 @@ public class ControllerUpdateContext implements IContentUpdateContext<IControlle
 	@Override
 	public IController getController(final Object model, final IController parent) {
 
-		final IController existingController = contentManager.getController(model);
+		final IController existingController = this.contentManager.getController(model);
 		if (existingController != null) {
-			final boolean wasJustCreated = createdControllers.contains(existingController);
-			final boolean alreadyReused = !reusedControllers.add(existingController);
+			final boolean wasJustCreated = this.createdControllers.contains(existingController);
+			final boolean alreadyReused = !this.reusedControllers.add(existingController);
 			if (wasJustCreated || alreadyReused) {
 				throw new IllegalStateException("parent has multiple times same child");
 			}
 			return existingController;
 		}
-		final IController newController = contentManager.createController(model, parent);
-		createdControllers.add(newController);
+		final IController newController = this.contentManager.createController(model, parent);
+		this.createdControllers.add(newController);
 		return newController;
 	}
 
 	public Set<IController> getCreatedControllers() {
-		return createdControllers;
+		return this.createdControllers;
 	}
 
 	public Set<IController> getReusedControllers() {
-		return reusedControllers;
+		return this.reusedControllers;
 	}
 
 	@Override
-	public Collection<?> getModelChildren(IController controller) {
+	public Collection<?> getModelChildren(final IController controller) {
 		return controller.getModelChildren();
 	}
 

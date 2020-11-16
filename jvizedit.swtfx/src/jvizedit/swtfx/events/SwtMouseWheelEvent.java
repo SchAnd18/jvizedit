@@ -18,22 +18,22 @@ public class SwtMouseWheelEvent implements IMouseWheelEvent {
 
 	@Override
 	public Event getRealEvent() {
-		return swtEvent;
+		return this.swtEvent;
 	}
 
 	@Override
 	public double wheelCount() {
-		return swtEvent.count / 20d;
+		return this.swtEvent.count / 20d;
 	}
 
 	@Override
 	public double getX() {
-		return swtEvent.x;
+		return this.swtEvent.x;
 	}
 
 	@Override
 	public double getY() {
-		return swtEvent.y;
+		return this.swtEvent.y;
 	}
 
 }

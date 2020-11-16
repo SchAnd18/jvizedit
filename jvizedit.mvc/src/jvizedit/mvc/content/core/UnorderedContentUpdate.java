@@ -16,12 +16,12 @@ public class UnorderedContentUpdate<U extends IControllerBase> implements IConte
 
 	@Override
 	public Collection<? extends U> getAdded() {
-		return added;
+		return this.added;
 	}
 
 	@Override
 	public Collection<? extends U> getRemoved() {
-		return removed;
+		return this.removed;
 	}
 
 }

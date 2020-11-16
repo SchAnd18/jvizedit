@@ -34,16 +34,17 @@ public class ShapeObjectController extends AbstractObservingController<ShapeObje
 	private final Label textLabel;
 	private Shape currentShape;
 
-	public ShapeObjectController(IContentManager contentManager, IController parent, ShapeObject shapeObject) {
+	public ShapeObjectController(final IContentManager contentManager, final IController parent,
+			final ShapeObject shapeObject) {
 		super(contentManager, parent, shapeObject);
 
 		// setup ui
 		this.view = new StackPane();
-		this.view.getTransforms().add(dragPreviewTranslate);
+		this.view.getTransforms().add(this.dragPreviewTranslate);
 
 		this.textLabel = new Label();
 		this.textLabel.setAlignment(Pos.CENTER);
-		this.view.getChildren().add(textLabel);
+		this.view.getChildren().add(this.textLabel);
 
 		/*
 		 * Set controller always as user data for root element. This is used to find the
@@ -53,7 +54,7 @@ public class ShapeObjectController extends AbstractObservingController<ShapeObje
 	}
 
 	public Translate getDragPreviewTranslate() {
-		return dragPreviewTranslate;
+		return this.dragPreviewTranslate;
 	}
 
 	@Override
@@ -65,24 +66,24 @@ public class ShapeObjectController extends AbstractObservingController<ShapeObje
 	public void updateView() {
 		if (getModel().getShapeType() == ShapeType.Oval) {
 			final Ellipse ellipse;
-			if (currentShape instanceof Ellipse) {
-				ellipse = (Ellipse) currentShape;
+			if (this.currentShape instanceof Ellipse) {
+				ellipse = (Ellipse) this.currentShape;
 			} else {
 				ellipse = new Ellipse();
-				this.view.getChildren().remove(currentShape);
-				currentShape = ellipse;
-				this.view.getChildren().add(0, currentShape);
+				this.view.getChildren().remove(this.currentShape);
+				this.currentShape = ellipse;
+				this.view.getChildren().add(0, this.currentShape);
 			}
 			updateEllipse(ellipse);
 		} else if (getModel().getShapeType() == ShapeType.Rectangle) {
 			final Rectangle rect;
-			if (currentShape instanceof Rectangle) {
-				rect = (Rectangle) currentShape;
+			if (this.currentShape instanceof Rectangle) {
+				rect = (Rectangle) this.currentShape;
 			} else {
 				rect = new Rectangle();
-				this.view.getChildren().remove(currentShape);
-				currentShape = rect;
-				this.view.getChildren().add(0, currentShape);
+				this.view.getChildren().remove(this.currentShape);
+				this.currentShape = rect;
+				this.view.getChildren().add(0, this.currentShape);
 			}
 			updateRectangle(rect);
 		} else {
@@ -101,26 +102,26 @@ public class ShapeObjectController extends AbstractObservingController<ShapeObje
 		return Optional.ofNullable(getModel().getColor()).map(Color::valueOf).orElse(Color.AQUA);
 	}
 
-	private void updateEllipse(Ellipse shape) {
+	private void updateEllipse(final Ellipse shape) {
 		shape.setRadiusX(getModel().getWidth() / 2);
 		shape.setRadiusY(getModel().getHeight() / 2);
 		shape.setFill(getColor());
 	}
 
-	private void updateRectangle(Rectangle rectangle) {
+	private void updateRectangle(final Rectangle rectangle) {
 		rectangle.setWidth(getModel().getWidth());
 		rectangle.setHeight(getModel().getHeight());
 		rectangle.setFill(getColor());
 	}
 
 	@Override
-	public IContentHandler<IController> getConentHandler() {
+	public IContentHandler<IController> getContentHandler() {
 		return null;
 	}
 
 	@Override
 	public boolean isDisposed() {
-		return isDisposed;
+		return this.isDisposed;
 	}
 
 	@Override
@@ -130,11 +131,11 @@ public class ShapeObjectController extends AbstractObservingController<ShapeObje
 
 	@Override
 	public StackPane getView() {
-		return view;
+		return this.view;
 	}
 
 	@Override
-	public void setSelectionStatus(boolean isSelected) {
+	public void setSelectionStatus(final boolean isSelected) {
 		// TODO: Replace this by a selection border effect in feedback layer
 		if (isSelected) {
 			final Border selBorder = new Border(

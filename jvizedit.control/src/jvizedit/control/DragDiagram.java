@@ -24,15 +24,15 @@ public class DragDiagram implements IControlStateEventHandler<IMouseEvent> {
 		this.dragDiagram = cstm.getOrCreateState(STATE_DRAG_DIAGRAM);
 		this.init = cstm.getInitState();
 
-		this.rightMouseDown.addStateTransition(dragDiagram, this);
-		this.dragDiagram.addStateTransition(dragDiagram, this);
-		this.dragDiagram.addStateTransition(init, this);
+		this.rightMouseDown.addStateTransition(this.dragDiagram, this);
+		this.dragDiagram.addStateTransition(this.dragDiagram, this);
+		this.dragDiagram.addStateTransition(this.init, this);
 
 		this.modelLayer = modelLayer;
 	}
 
 	public ControlState getDragDiagramState() {
-		return dragDiagram;
+		return this.dragDiagram;
 	}
 
 	@Override
@@ -41,21 +41,22 @@ public class DragDiagram implements IControlStateEventHandler<IMouseEvent> {
 	}
 
 	@Override
-	public boolean handleInputEvent(ControlState srcState, ControlState targetState, IMouseEvent event) {
+	public boolean handleInputEvent(final ControlState srcState, final ControlState targetState,
+			final IMouseEvent event) {
 
-		final boolean isDrag = event.isDrag() && event.getButton() == MouseButton.RIGHT;
-		if (srcState == rightMouseDown && targetState == dragDiagram && isDrag) {
+		final boolean isDrag = event.isDrag() && (event.getButton() == MouseButton.RIGHT);
+		if ((srcState == this.rightMouseDown) && (targetState == this.dragDiagram) && isDrag) {
 			startDrag(event);
 			return true;
 		}
 
-		if (srcState == dragDiagram && targetState == dragDiagram && isDrag) {
+		if ((srcState == this.dragDiagram) && (targetState == this.dragDiagram) && isDrag) {
 			updateDrag(event);
 			return true;
 		}
 
-		final boolean isMouseUp = event.isButtonUp() && event.getButton() == MouseButton.RIGHT;
-		if (srcState == dragDiagram && targetState == init && isMouseUp) {
+		final boolean isMouseUp = event.isButtonUp() && (event.getButton() == MouseButton.RIGHT);
+		if ((srcState == this.dragDiagram) && (targetState == this.init) && isMouseUp) {
 			finishDrag(event);
 			return true;
 		}
@@ -63,27 +64,27 @@ public class DragDiagram implements IControlStateEventHandler<IMouseEvent> {
 		return false;
 	}
 
-	private void startDrag(IMouseEvent dragEvent) {
-		mouseStartPos = new Point2D(dragEvent.getX(), dragEvent.getY());
-		final double offX = modelLayer.getOffsetX();
-		final double offY = modelLayer.getOffsetY();
-		rootStartPos = new Point2D(offX, offY);
+	private void startDrag(final IMouseEvent dragEvent) {
+		this.mouseStartPos = new Point2D(dragEvent.getX(), dragEvent.getY());
+		final double offX = this.modelLayer.getOffsetX();
+		final double offY = this.modelLayer.getOffsetY();
+		this.rootStartPos = new Point2D(offX, offY);
 	}
 
-	private void updateDrag(IMouseEvent dragEvent) {
+	private void updateDrag(final IMouseEvent dragEvent) {
 		performMove(dragEvent);
 	}
 
-	private void finishDrag(IMouseEvent mouseUpEvent) {
+	private void finishDrag(final IMouseEvent mouseUpEvent) {
 		performMove(mouseUpEvent);
 	}
 
 	private void performMove(final IMouseEvent globalMouseEvent) {
-		final double xDiff = globalMouseEvent.getX() - mouseStartPos.getX();
-		final double yDiff = globalMouseEvent.getY() - mouseStartPos.getY();
-		final double x = rootStartPos.getX() + xDiff;
-		final double y = rootStartPos.getY() + yDiff;
-		modelLayer.setOffset(x, y);
+		final double xDiff = globalMouseEvent.getX() - this.mouseStartPos.getX();
+		final double yDiff = globalMouseEvent.getY() - this.mouseStartPos.getY();
+		final double x = this.rootStartPos.getX() + xDiff;
+		final double y = this.rootStartPos.getY() + yDiff;
+		this.modelLayer.setOffset(x, y);
 	}
 
 }

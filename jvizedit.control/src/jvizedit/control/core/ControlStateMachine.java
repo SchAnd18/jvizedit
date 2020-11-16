@@ -23,29 +23,29 @@ public class ControlStateMachine {
 	}
 
 	public ControlState getOrCreateState(final String name) {
-		ControlState state = stateMap.get(name);
+		ControlState state = this.stateMap.get(name);
 		if (state == null) {
 			state = new ControlState(name);
-			stateMap.put(name, state);
+			this.stateMap.put(name, state);
 		}
 		return state;
 	}
 
-	public void setCurrentState(ControlState currentState) {
+	public void setCurrentState(final ControlState currentState) {
 		this.currentState = currentState;
 	}
 
 	public ControlState getCurrentState() {
-		return currentState;
+		return this.currentState;
 	}
 
-	public boolean handleEvent(Object event) {
-		final ControlState oldState = currentState;
-		final int index = currentState.handleEvent(event); // TODO: return a structure, not an index
+	public boolean handleEvent(final Object event) {
+		final ControlState oldState = this.currentState;
+		final int index = this.currentState.handleEvent(event); // TODO: return a structure, not an index
 		if (index >= 0) {
-			final ControlState newState = currentState.getState(index);
-			final IControlStateEventHandler<?> transition = currentState.getTransition(index);
-			currentState = newState;
+			final ControlState newState = this.currentState.getState(index);
+			final IControlStateEventHandler<?> transition = this.currentState.getTransition(index);
+			this.currentState = newState;
 			notifyUpdate(oldState, transition, event);
 			return true;
 		} else {
@@ -55,8 +55,8 @@ public class ControlStateMachine {
 
 	private void notifyUpdate(final ControlState oldState, final IControlStateEventHandler<?> transition,
 			final Object event) {
-		for (final IControlStateUpdateListener listener : listeners) {
-			listener.controlStateChanged(oldState, currentState, transition, event);
+		for (final IControlStateUpdateListener listener : this.listeners) {
+			listener.controlStateChanged(oldState, this.currentState, transition, event);
 		}
 	}
 

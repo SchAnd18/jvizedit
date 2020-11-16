@@ -23,8 +23,9 @@ public class ViewerSelectionUpdater implements ISelectionAreaListener, ISelectOn
 	}
 
 	@Override
-	public void updateSelection(IMouseEvent mouseEvent, ISelectableController controller, SelectionUpdate update) {
-		try (ViewerSelectionUpdate selectionUpdate = viewerSelection.startSelectionUpdate()) {
+	public void updateSelection(final IMouseEvent mouseEvent, final ISelectableController controller,
+			final SelectionUpdate update) {
+		try (ViewerSelectionUpdate selectionUpdate = this.viewerSelection.startSelectionUpdate()) {
 			final Object model = controller.getModel();
 			switch (update) {
 			case SET:
@@ -49,25 +50,25 @@ public class ViewerSelectionUpdater implements ISelectionAreaListener, ISelectOn
 	}
 
 	@Override
-	public void clearSelection(IMouseEvent mouseEvent) {
-		try (ViewerSelectionUpdate selectionUpdate = viewerSelection.startSelectionUpdate()) {
+	public void clearSelection(final IMouseEvent mouseEvent) {
+		try (ViewerSelectionUpdate selectionUpdate = this.viewerSelection.startSelectionUpdate()) {
 			selectionUpdate.clearSelection();
 		}
 	}
 
 	@Override
-	public void onSelectionArea(ESelectionAreaEvent event, double x, double y, double width, double height,
-			boolean toggle) {
+	public void onSelectionArea(final ESelectionAreaEvent event, final double x, final double y, final double width,
+			final double height, final boolean toggle) {
 		if (event != ESelectionAreaEvent.apply) {
 			return;
 		}
-		try (ViewerSelectionUpdate selectionUpdate = viewerSelection.startSelectionUpdate()) {
-			final Collection<ISelectableController> controllers = selectableFinder.findControllersIn(x, y, width,
+		try (ViewerSelectionUpdate selectionUpdate = this.viewerSelection.startSelectionUpdate()) {
+			final Collection<ISelectableController> controllers = this.selectableFinder.findControllersIn(x, y, width,
 					height);
 			final Set<Object> objects = controllers.stream().map(ISelectableController::getModel)
 					.collect(Collectors.toSet());
 			if (toggle) {
-				final Set<Object> alreadySelected = new HashSet<>(viewerSelection.getSelectedObjects());
+				final Set<Object> alreadySelected = new HashSet<>(this.viewerSelection.getSelectedObjects());
 				alreadySelected.retainAll(objects);
 				objects.forEach(selectionUpdate::addToSelection);
 				alreadySelected.forEach(selectionUpdate::removeFromSelection);

@@ -21,29 +21,29 @@ public class SwtShapeList {
 
 	final TableViewer tableViewer;
 
-	public SwtShapeList(Composite parent) {
+	public SwtShapeList(final Composite parent) {
 
 		final Group group = new Group(parent, SWT.NONE);
 		group.setText("Shape Types");
 		group.setLayout(new FillLayout());
 
-		tableViewer = new TableViewer(group);
-		tableViewer.setContentProvider(new ArrayContentProvider());
-		tableViewer.setLabelProvider(new LabelProvider());
-		tableViewer.setInput(ShapeType.values());
+		this.tableViewer = new TableViewer(group);
+		this.tableViewer.setContentProvider(new ArrayContentProvider());
+		this.tableViewer.setLabelProvider(new LabelProvider());
+		this.tableViewer.setInput(ShapeType.values());
 
-		final DragSource dragSource = new DragSource(tableViewer.getControl(), DND.DROP_MOVE);
+		final DragSource dragSource = new DragSource(this.tableViewer.getControl(), DND.DROP_MOVE);
 		dragSource.setTransfer(LocalSelectionTransfer.getTransfer(), TextTransfer.getInstance());
 		dragSource.addDragListener(new DragSourceAdapter() {
 
 			@Override
-			public void dragStart(DragSourceEvent event) {
-				event.doit = !tableViewer.getStructuredSelection().isEmpty();
+			public void dragStart(final DragSourceEvent event) {
+				event.doit = !SwtShapeList.this.tableViewer.getStructuredSelection().isEmpty();
 			}
 
 			@Override
-			public void dragSetData(DragSourceEvent event) {
-				final IStructuredSelection selection = tableViewer.getStructuredSelection();
+			public void dragSetData(final DragSourceEvent event) {
+				final IStructuredSelection selection = SwtShapeList.this.tableViewer.getStructuredSelection();
 				LocalSelectionTransfer.getTransfer().setSelection(selection);
 
 				if (TextTransfer.getInstance().isSupportedType(event.dataType)) {
@@ -53,7 +53,7 @@ public class SwtShapeList {
 			}
 
 			@Override
-			public void dragFinished(DragSourceEvent event) {
+			public void dragFinished(final DragSourceEvent event) {
 				LocalSelectionTransfer.getTransfer().setSelection(null);
 			}
 		});

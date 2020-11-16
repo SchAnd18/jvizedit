@@ -32,26 +32,27 @@ public class SelectionAreaEffect implements ISelectionAreaListener {
 	}
 
 	@Override
-	public void onSelectionArea(ESelectionAreaEvent event, double x, double y, double width, double height,
-			boolean toggle) {
+	public void onSelectionArea(final ESelectionAreaEvent event, final double x, final double y, final double width,
+			final double height, final boolean toggle) {
 		switch (event) {
 		case init:
-			selectionLayerParent.getChildren().add(selectionRectangle);
+			this.selectionLayerParent.getChildren().add(this.selectionRectangle);
 		case update:
-			final Bounds b = selectionLayerParent.sceneToLocal(new BoundingBox(x, y, width, height));
-			selectionRectangle.setX(b.getMinX());
-			selectionRectangle.setY(b.getMinY());
-			selectionRectangle.setWidth(b.getWidth());
-			selectionRectangle.setHeight(b.getHeight());
+			final Bounds b = this.selectionLayerParent.sceneToLocal(new BoundingBox(x, y, width, height));
+			this.selectionRectangle.setX(b.getMinX());
+			this.selectionRectangle.setY(b.getMinY());
+			this.selectionRectangle.setWidth(b.getWidth());
+			this.selectionRectangle.setHeight(b.getHeight());
 
-			if (translateBorderSize) {
+			if (this.translateBorderSize) {
 				try {
-					final double w = selectionLayerParent.getLocalToSceneTransform().inverseDeltaTransform(1, 1).getX();
-					selectionRectangle.setStrokeWidth(w);
-				} catch (NonInvertibleTransformException e) {
+					final double w = this.selectionLayerParent.getLocalToSceneTransform().inverseDeltaTransform(1, 1)
+							.getX();
+					this.selectionRectangle.setStrokeWidth(w);
+				} catch (final NonInvertibleTransformException e) {
 					// this is a minor problem that just should be logged
-					selectionRectangle.setStrokeWidth(1);
-					translateBorderSize = false;
+					this.selectionRectangle.setStrokeWidth(1);
+					this.translateBorderSize = false;
 					e.printStackTrace();
 				}
 			}
@@ -59,7 +60,7 @@ public class SelectionAreaEffect implements ISelectionAreaListener {
 			break;
 		case apply:
 		case cancel:
-			selectionLayerParent.getChildren().remove(selectionRectangle);
+			this.selectionLayerParent.getChildren().remove(this.selectionRectangle);
 		}
 	}
 }

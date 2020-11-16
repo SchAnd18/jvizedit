@@ -22,9 +22,9 @@ public class DragExternal implements IControlStateEventHandler<IDragEvent> {
 		this.init = cstm.getInitState();
 		this.dragExternal = cstm.getOrCreateState(STATE_DRAG_EXTERNAL);
 
-		this.init.addStateTransition(dragExternal, this);
-		this.dragExternal.addStateTransition(dragExternal, this);
-		this.dragExternal.addStateTransition(init, this);
+		this.init.addStateTransition(this.dragExternal, this);
+		this.dragExternal.addStateTransition(this.dragExternal, this);
+		this.dragExternal.addStateTransition(this.init, this);
 	}
 
 	@Override
@@ -33,16 +33,17 @@ public class DragExternal implements IControlStateEventHandler<IDragEvent> {
 	}
 
 	@Override
-	public boolean handleInputEvent(ControlState srcState, ControlState targetState, IDragEvent event) {
+	public boolean handleInputEvent(final ControlState srcState, final ControlState targetState,
+			final IDragEvent event) {
 		final DragEventType dragEventType = event.getType();
 
-		final boolean potDragEnterEvent = dragEventType == DragEventType.dragEnter
-				|| dragEventType == DragEventType.dragOver;
-		if (srcState == init && targetState == dragExternal && potDragEnterEvent) {
+		final boolean potDragEnterEvent = (dragEventType == DragEventType.dragEnter)
+				|| (dragEventType == DragEventType.dragOver);
+		if ((srcState == this.init) && (targetState == this.dragExternal) && potDragEnterEvent) {
 			notifyListeners(EDiagramDragEventType.startDrag, event);
 			return true;
 		}
-		if (srcState == dragExternal && targetState == dragExternal) {
+		if ((srcState == this.dragExternal) && (targetState == this.dragExternal)) {
 			if (dragEventType == DragEventType.dragOver) {
 				notifyListeners(EDiagramDragEventType.continueDrag, event);
 				return true;
@@ -52,7 +53,8 @@ public class DragExternal implements IControlStateEventHandler<IDragEvent> {
 				return true;
 			}
 		}
-		if (srcState == dragExternal && targetState == init && dragEventType == DragEventType.dragExit) {
+		if ((srcState == this.dragExternal) && (targetState == this.init)
+				&& (dragEventType == DragEventType.dragExit)) {
 			notifyListeners(EDiagramDragEventType.abortDrag, event);
 			return true;
 		}
@@ -69,7 +71,7 @@ public class DragExternal implements IControlStateEventHandler<IDragEvent> {
 
 	private void notifyListeners(final EDiagramDragEventType type, final IDragEvent sourceEvent) {
 		final RealDragEventInfo realDragEvent = new RealDragEventInfo(sourceEvent, type);
-		for (IDragDropListener l : this.listeners) {
+		for (final IDragDropListener l : this.listeners) {
 			l.dragEvent(realDragEvent);
 		}
 	}

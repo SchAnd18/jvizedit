@@ -1,6 +1,6 @@
 package jvizedit.swtfx.sample.control;
 
-import java.util.Set;
+import java.util.List;
 
 import javafx.geometry.Point2D;
 import jvizedit.control.dragdrop.EDragDropTransfer;
@@ -16,7 +16,7 @@ public class DragShapeObjects implements IDragDropListener {
 	private final IContentManager contentManager;
 	private final ViewerSelection viewerSelection;
 
-	private Set<ShapeObjectController> draggedObjects;
+	private List<ShapeObjectController> draggedObjects;
 	private double startX;
 	private double startY;
 
@@ -26,7 +26,7 @@ public class DragShapeObjects implements IDragDropListener {
 	}
 
 	@Override
-	public void dragEvent(IDragEventInfo info) {
+	public void dragEvent(final IDragEventInfo info) {
 		final double x = info.getX();
 		final double y = info.getY();
 		switch (info.getType()) {
@@ -34,17 +34,18 @@ public class DragShapeObjects implements IDragDropListener {
 			/*
 			 * Remember start position of drag and the elements that shall be dragged
 			 */
-			startX = x;
-			startY = y;
-			draggedObjects = viewerSelection.getSelectedControllers(ShapeObjectController.class);
+			this.startX = x;
+			this.startY = y;
+			this.draggedObjects = this.viewerSelection.getSelectedControllers(ShapeObjectController.class);
 			break;
 		case continueDrag:
 			/*
 			 * Calculate drag-delta and apply set it as drag - review. This makes the
 			 * figures move during drag operation.
 			 */
-			draggedObjects.forEach(o -> {
-				final Point2D p = o.getView().sceneToLocal(x, y).subtract(o.getView().sceneToLocal(startX, startY));
+			this.draggedObjects.forEach(o -> {
+				final Point2D p = o.getView().sceneToLocal(x, y)
+						.subtract(o.getView().sceneToLocal(this.startX, this.startY));
 				o.getDragPreviewTranslate().setX(p.getX());
 				o.getDragPreviewTranslate().setY(p.getY());
 			});
@@ -59,22 +60,23 @@ public class DragShapeObjects implements IDragDropListener {
 			 * performRefersh() In a real world example there would be some commands called
 			 * here. The refresh should be just triggerd after a command call.
 			 */
-			draggedObjects.forEach(o -> {
-				final Point2D p = o.getView().sceneToLocal(x, y).subtract(o.getView().sceneToLocal(startX, startY));
+			this.draggedObjects.forEach(o -> {
+				final Point2D p = o.getView().sceneToLocal(x, y)
+						.subtract(o.getView().sceneToLocal(this.startX, this.startY));
 				final ShapeObject m = o.getModel();
 				m.setX(m.getX() + p.getX());
 				m.setY(m.getY() + p.getY());
 			});
 
-			contentManager.performRefresh();
+			this.contentManager.performRefresh();
 			// there is no break ...
 		case abortDrag:
 			// ... because in abort and drop we need to clear the preview
-			draggedObjects.stream().map(ShapeObjectController::getDragPreviewTranslate).forEach(t -> {
+			this.draggedObjects.stream().map(ShapeObjectController::getDragPreviewTranslate).forEach(t -> {
 				t.setX(0);
 				t.setY(0);
 			});
-			draggedObjects = null;
+			this.draggedObjects = null;
 			break;
 		}
 	}

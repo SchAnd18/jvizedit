@@ -63,24 +63,24 @@ public class ShapeViewerControl {
 			parent.getDisplay().addFilter(SWT.MouseWheel, new Listener() {
 
 				@Override
-				public void handleEvent(Event event) {
+				public void handleEvent(final Event event) {
 					final SwtMouseWheelEvent wheel = new SwtMouseWheelEvent(event);
 					cstm.handleEvent(wheel);
 				}
 			});
 
 			final OpenContextMenu openContextMenu = new OpenContextMenu(cstm);
-			openContextMenu.addOpenContextMenuListener(new ContextMenu(fxCanvas));
+			openContextMenu.addOpenContextMenuListener(new ContextMenu(this.fxCanvas));
 
 			new DragDiagram(cstm, openContextMenu, fxRoot);
 
 			new Zoom(cstm, fxRoot);
 
-			final ISelectableFinder selectableFinder = new SelectableControllerFinderImpl(modelContent);
+			final ISelectableFinder selectableFinder = new SelectableControllerFinderImpl(this.modelContent);
 			final SelectOnClick selectOnClick = new SelectOnClick(cstm, selectableFinder);
 
-			this.viewerSelection = new ViewerSelection(modelContent);
-			final ViewerSelectionUpdater selectionUpdater = new ViewerSelectionUpdater(viewerSelection,
+			this.viewerSelection = new ViewerSelection(this.modelContent);
+			final ViewerSelectionUpdater selectionUpdater = new ViewerSelectionUpdater(this.viewerSelection,
 					selectableFinder);
 			selectOnClick.addSelectOnClickListener(selectionUpdater);
 
@@ -97,11 +97,11 @@ public class ShapeViewerControl {
 			selectionAreaOnDrag.addSelectionAreaListener(selectionUpdater);
 
 			// apply drag behavior to shape objects
-			final DragShapeObjects dragShapeObjects = new DragShapeObjects(viewerSelection, modelContent);
+			final DragShapeObjects dragShapeObjects = new DragShapeObjects(this.viewerSelection, this.modelContent);
 			dragSelection.addDragDropListener(dragShapeObjects);
 
 			// apply creation of shapes by dragged types
-			final DragShapeTypes dragShapeTypes = new DragShapeTypes(modelContent);
+			final DragShapeTypes dragShapeTypes = new DragShapeTypes(this.modelContent);
 			dragExternal.addDragDropListener(dragShapeTypes);
 
 		}
@@ -111,9 +111,9 @@ public class ShapeViewerControl {
 		this.modelContent.performRefresh();
 	}
 
-	public void setInput(ShapesRoot shapeModel) {
-		modelContent.setRoot(shapeModel);
-		modelContent.performRefresh();
+	public void setInput(final ShapesRoot shapeModel) {
+		this.modelContent.setRoot(shapeModel);
+		this.modelContent.performRefresh();
 	}
 
 }

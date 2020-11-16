@@ -12,8 +12,8 @@ public class PseudoDragEventInfo implements IDragEventInfo {
 	private final double x;
 	private final double y;
 
-	public PseudoDragEventInfo(DragSelection dragSelection, IWrappedEvent sourceEvent, EDiagramDragEventType type,
-			double x, double y, ISelectableController dragSource) {
+	public PseudoDragEventInfo(final DragSelection dragSelection, final IWrappedEvent sourceEvent,
+			final EDiagramDragEventType type, final double x, final double y, final ISelectableController dragSource) {
 		this.sourceEvent = sourceEvent;
 		this.dragSelection = dragSelection;
 		this.type = type;
@@ -22,23 +22,24 @@ public class PseudoDragEventInfo implements IDragEventInfo {
 		this.dragSource = dragSource;
 	}
 
+	@Override
 	public EDiagramDragEventType getType() {
 		return this.type;
 	}
 
 	@Override
 	public double getX() {
-		return x;
+		return this.x;
 	}
 
 	@Override
 	public double getY() {
-		return y;
+		return this.y;
 	}
 
 	@Override
 	public IWrappedEvent getSourceEvent() {
-		return sourceEvent;
+		return this.sourceEvent;
 	}
 
 	@Override
@@ -48,18 +49,18 @@ public class PseudoDragEventInfo implements IDragEventInfo {
 
 	@Override
 	public boolean isAccepted() {
-		return dragSelection.isPseudoTransferAccepted();
+		return this.dragSelection.isPseudoTransferAccepted();
 	}
 
 	public ISelectableController getDragSource() {
-		return dragSource;
+		return this.dragSource;
 	}
 
 	@Override
-	public void setAcceptedTransfers(EDragDropTransfer... transfers) {
-		for (EDragDropTransfer t : transfers) {
+	public void setAcceptedTransfers(final EDragDropTransfer... transfers) {
+		for (final EDragDropTransfer t : transfers) {
 			if (t == EDragDropTransfer.pseudo) {
-				dragSelection.acceptPseudoTransfer();
+				this.dragSelection.acceptPseudoTransfer();
 			}
 		}
 	}

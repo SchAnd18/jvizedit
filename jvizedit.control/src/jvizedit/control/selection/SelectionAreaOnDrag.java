@@ -9,8 +9,8 @@ import jvizedit.control.core.ControlStateMachine.IControlStateUpdateListener;
 import jvizedit.control.core.IControlStateEventHandler;
 import jvizedit.control.core.events.IKeyEvent;
 import jvizedit.control.core.events.IKeyEvent.Key;
-import jvizedit.control.core.events.IMouseEvent.MouseButton;
 import jvizedit.control.core.events.IMouseEvent;
+import jvizedit.control.core.events.IMouseEvent.MouseButton;
 import jvizedit.control.core.events.Point2D;
 
 public class SelectionAreaOnDrag implements IControlStateUpdateListener {
@@ -23,15 +23,15 @@ public class SelectionAreaOnDrag implements IControlStateUpdateListener {
 	private Point2D selectionAreaStart;
 
 	public SelectionAreaOnDrag(final ControlStateMachine cstm, final SelectOnClick selectOnClick) {
-		init = cstm.getOrCreateState("Init");
+		this.init = cstm.getOrCreateState("Init");
 		this.mouseDown = selectOnClick.getMouseDownState();
 		this.selectionArea = cstm.getOrCreateState("SelectionArea");
 
-		this.mouseDown.addStateTransition(selectionArea, performDrag);
-		this.selectionArea.addStateTransition(selectionArea, performDrag);
-		this.selectionArea.addStateTransition(init, performDrag);
+		this.mouseDown.addStateTransition(this.selectionArea, this.performDrag);
+		this.selectionArea.addStateTransition(this.selectionArea, this.performDrag);
+		this.selectionArea.addStateTransition(this.init, this.performDrag);
 
-		this.selectionArea.addStateTransition(init, abortDrag);
+		this.selectionArea.addStateTransition(this.init, this.abortDrag);
 
 		cstm.addUpdateListener(this);
 	}
@@ -45,16 +45,20 @@ public class SelectionAreaOnDrag implements IControlStateUpdateListener {
 	}
 
 	private final IControlStateEventHandler<IKeyEvent> abortDrag = new IControlStateEventHandler<IKeyEvent>() {
-		public boolean handleInputEvent(ControlState srcState, ControlState targetState, IKeyEvent event) {
-			final boolean escUp = event.isKeyReleased() && event.getKey() == Key.ESCAPE;
-			if (srcState == selectionArea && targetState == init && escUp) {
-				selectionAreaStart = null;
+		@Override
+		public boolean handleInputEvent(final ControlState srcState, final ControlState targetState,
+				final IKeyEvent event) {
+			final boolean escUp = event.isKeyReleased() && (event.getKey() == Key.ESCAPE);
+			if ((srcState == SelectionAreaOnDrag.this.selectionArea) && (targetState == SelectionAreaOnDrag.this.init)
+					&& escUp) {
+				SelectionAreaOnDrag.this.selectionAreaStart = null;
 				cancelSelectionArea();
 				return true;
 			}
 			return false;
 		}
 
+		@Override
 		public Class<IKeyEvent> getExpectedEventType() {
 			return IKeyEvent.class;
 		}
@@ -65,28 +69,32 @@ public class SelectionAreaOnDrag implements IControlStateUpdateListener {
 		@Override
 		public boolean handleInputEvent(final ControlState srcState, final ControlState targetState,
 				final IMouseEvent event) {
-			if (selectionAreaStart == null) {
+			if (SelectionAreaOnDrag.this.selectionAreaStart == null) {
 				return false;
 			}
 
-			final boolean isDrag = event.isDrag() && event.getButton() == MouseButton.LEFT;
-			final boolean isMouseUp = event.isButtonUp() && event.getButton() == MouseButton.LEFT;
+			final boolean isDrag = event.isDrag() && (event.getButton() == MouseButton.LEFT);
+			final boolean isMouseUp = event.isButtonUp() && (event.getButton() == MouseButton.LEFT);
 
-			if (srcState == mouseDown && targetState == selectionArea && isDrag) {
+			if ((srcState == SelectionAreaOnDrag.this.mouseDown)
+					&& (targetState == SelectionAreaOnDrag.this.selectionArea) && isDrag) {
 				updateSelectionArea(event, ESelectionAreaEvent.init);
 				return true;
 			}
-			if (srcState == selectionArea && targetState == selectionArea && isDrag) {
+			if ((srcState == SelectionAreaOnDrag.this.selectionArea)
+					&& (targetState == SelectionAreaOnDrag.this.selectionArea) && isDrag) {
 				updateSelectionArea(event, ESelectionAreaEvent.update);
 				return true;
 			}
-			if (srcState == selectionArea && targetState == init && isMouseUp) {
+			if ((srcState == SelectionAreaOnDrag.this.selectionArea) && (targetState == SelectionAreaOnDrag.this.init)
+					&& isMouseUp) {
 				updateSelectionArea(event, ESelectionAreaEvent.apply);
 				return true;
 			}
 			return false;
 		};
 
+		@Override
 		public Class<IMouseEvent> getExpectedEventType() {
 			return IMouseEvent.class;
 		}
@@ -94,28 +102,28 @@ public class SelectionAreaOnDrag implements IControlStateUpdateListener {
 
 	private void updateSelectionArea(final IMouseEvent event, final ESelectionAreaEvent areaEvent) {
 		final boolean toggle = event.isControlDown();
-		final double x = Math.min(selectionAreaStart.getX(), event.getX());
-		final double y = Math.min(selectionAreaStart.getY(), event.getY());
-		final double width = Math.max(selectionAreaStart.getX(), event.getX()) - x;
-		final double height = Math.max(selectionAreaStart.getY(), event.getY()) - y;
+		final double x = Math.min(this.selectionAreaStart.getX(), event.getX());
+		final double y = Math.min(this.selectionAreaStart.getY(), event.getY());
+		final double width = Math.max(this.selectionAreaStart.getX(), event.getX()) - x;
+		final double height = Math.max(this.selectionAreaStart.getY(), event.getY()) - y;
 
-		for (ISelectionAreaListener listener : this.listeners) {
+		for (final ISelectionAreaListener listener : this.listeners) {
 			listener.onSelectionArea(areaEvent, x, y, width, height, toggle);
 		}
 	}
 
 	private void cancelSelectionArea() {
-		for (ISelectionAreaListener listener : this.listeners) {
+		for (final ISelectionAreaListener listener : this.listeners) {
 			listener.onSelectionArea(ESelectionAreaEvent.cancel, 0, 0, 0, 0, false);
 		}
 	}
 
 	@Override
-	public void controlStateChanged(ControlState oldState, ControlState newState,
-			IControlStateEventHandler<?> transition, Object event) {
-		if (newState == mouseDown && event instanceof IMouseEvent) {
+	public void controlStateChanged(final ControlState oldState, final ControlState newState,
+			final IControlStateEventHandler<?> transition, final Object event) {
+		if ((newState == this.mouseDown) && (event instanceof IMouseEvent)) {
 			final IMouseEvent me = (IMouseEvent) event;
-			selectionAreaStart = new Point2D(me.getX(), me.getY());
+			this.selectionAreaStart = new Point2D(me.getX(), me.getY());
 		}
 	}
 

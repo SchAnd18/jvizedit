@@ -17,7 +17,7 @@ public class ViewerSelection implements IContentChangeListener {
 
 	private final List<IViewerSelectionChangeListener> selectionChangedListeners = new ArrayList<>();
 
-	private final LinkedHashSet<Object> selectedObjects = new LinkedHashSet<Object>();
+	private final LinkedHashSet<Object> selectedObjects = new LinkedHashSet<>();
 
 	private final IContentManager modelContent;
 
@@ -27,21 +27,21 @@ public class ViewerSelection implements IContentChangeListener {
 		this(modelContent, false);
 	}
 
-	public ViewerSelection(final IContentManager modelContent, boolean contentIsController) {
+	public ViewerSelection(final IContentManager modelContent, final boolean contentIsController) {
 		this.modelContent = modelContent;
 		this.modelContent.addContentChangeListener(this);
 		this.contentIsController = contentIsController;
 	}
 
 	public ViewerSelectionUpdate startSelectionUpdate() {
-		if (currentUpdate == null) {
-			currentUpdate = new ViewerSelectionUpdate();
+		if (this.currentUpdate == null) {
+			this.currentUpdate = new ViewerSelectionUpdate();
 		}
-		return currentUpdate;
+		return this.currentUpdate;
 	}
 
 	@Override
-	public void onContentChange(IContentChange contentChange) {
+	public void onContentChange(final IContentChange contentChange) {
 		/*
 		 * Set the selection status for new controllers after content change. This is
 		 * important because their model-objects might had already been added to the
@@ -52,13 +52,13 @@ public class ViewerSelection implements IContentChangeListener {
 				.map(ISelectableController.class::cast)//
 				.forEach(sc -> {
 					final Object model = sc.getModel();
-					final boolean isSelected = selectedObjects.contains(model);
+					final boolean isSelected = this.selectedObjects.contains(model);
 					sc.setSelectionStatus(isSelected);
 				});
 	}
 
-	private void checkType(Object model) {
-		if (contentIsController) {
+	private void checkType(final Object model) {
+		if (this.contentIsController) {
 			return;
 		}
 		if (model instanceof IController) {
@@ -66,17 +66,18 @@ public class ViewerSelection implements IContentChangeListener {
 		}
 	}
 
-	public boolean isSelected(Object model) {
-		return selectedObjects.contains(model);
+	public boolean isSelected(final Object model) {
+		return this.selectedObjects.contains(model);
 	}
 
 	public List<ISelectableController> getSelectedControllers() {
-		return selectedObjects.stream().map(modelContent::getController).filter(ISelectableController.class::isInstance)
-				.map(ISelectableController.class::cast).collect(Collectors.toList());
+		return this.selectedObjects.stream().map(this.modelContent::getController)
+				.filter(ISelectableController.class::isInstance).map(ISelectableController.class::cast)
+				.collect(Collectors.toList());
 	}
 
-	public <T> List<T> getSelectedControllers(Class<T> controllerType) {
-		return selectedObjects.stream().map(modelContent::getController).filter(controllerType::isInstance)
+	public <T> List<T> getSelectedControllers(final Class<T> controllerType) {
+		return this.selectedObjects.stream().map(this.modelContent::getController).filter(controllerType::isInstance)
 				.map(controllerType::cast).collect(Collectors.toList());
 	}
 
@@ -86,14 +87,14 @@ public class ViewerSelection implements IContentChangeListener {
 	}
 
 	private void notifySelectionChange() {
-		selectionChangedListeners.forEach(c -> c.onSelectionChange(this));
+		this.selectionChangedListeners.forEach(c -> c.onSelectionChange(this));
 	}
 
-	public void addSelectionChangeListener(IViewerSelectionChangeListener listener) {
+	public void addSelectionChangeListener(final IViewerSelectionChangeListener listener) {
 		this.selectionChangedListeners.add(listener);
 	}
 
-	public void removeSelectionChangeListener(IViewerSelectionChangeListener listener) {
+	public void removeSelectionChangeListener(final IViewerSelectionChangeListener listener) {
 		this.selectionChangedListeners.remove(listener);
 	}
 
@@ -129,42 +130,44 @@ public class ViewerSelection implements IContentChangeListener {
 			this.removeFromSelection.clear();
 		}
 
-		public boolean isSelectedBeforeUpdate(Object object) {
-			return selectedObjects.contains(object);
+		public boolean isSelectedBeforeUpdate(final Object object) {
+			return ViewerSelection.this.selectedObjects.contains(object);
 		}
 
-		public boolean isSelected(Object object) {
+		public boolean isSelected(final Object object) {
 			final boolean isSelectedBeforeUpdate = isSelectedBeforeUpdate(object);
 			if (isSelectedBeforeUpdate) {
-				final boolean isRemoved = removeFromSelection.contains(object);
+				final boolean isRemoved = this.removeFromSelection.contains(object);
 				return !isRemoved;
 			} else {
-				final boolean isAdded = addToSelection.contains(object);
+				final boolean isAdded = this.addToSelection.contains(object);
 				return isAdded;
 			}
 		}
 
 		@Override
 		public void close() throws RuntimeException {
-			currentUpdate = null;
-			if (clearSelection) {
-				removeFromSelection.addAll(selectedObjects);
-				removeFromSelection.removeAll(addToSelection); // an object to add could be in the list
+			ViewerSelection.this.currentUpdate = null;
+			if (this.clearSelection) {
+				this.removeFromSelection.addAll(ViewerSelection.this.selectedObjects);
+				this.removeFromSelection.removeAll(this.addToSelection); // an object to add could be in the list
 			}
-			addToSelection.forEach(o -> {
-				final boolean added = selectedObjects.add(o);
+			this.addToSelection.forEach(o -> {
+				final boolean added = ViewerSelection.this.selectedObjects.add(o);
 				if (added) {
-					modelContent.getControllerOfType(ISelectableController.class, o).ifPresent(c -> {
-						c.setSelectionStatus(true);
-					});
+					ViewerSelection.this.modelContent.getControllerOfType(ISelectableController.class, o)
+							.ifPresent(c -> {
+								c.setSelectionStatus(true);
+							});
 				}
 			});
-			removeFromSelection.forEach(o -> {
-				final boolean removed = selectedObjects.remove(o);
+			this.removeFromSelection.forEach(o -> {
+				final boolean removed = ViewerSelection.this.selectedObjects.remove(o);
 				if (removed) {
-					modelContent.getControllerOfType(ISelectableController.class, o).ifPresent(c -> {
-						c.setSelectionStatus(false);
-					});
+					ViewerSelection.this.modelContent.getControllerOfType(ISelectableController.class, o)
+							.ifPresent(c -> {
+								c.setSelectionStatus(false);
+							});
 				}
 			});
 			notifySelectionChange();

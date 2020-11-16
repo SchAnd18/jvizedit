@@ -20,13 +20,13 @@ public class UnorderedContentHandler<T extends IControllerBase> implements ICont
 	}
 
 	@Override
-	public void updateContent(IContentUpdateContext<T> updateContext) {
-		final Collection<?> modelChildren = updateContext.getModelChildren(controller);
+	public void updateContent(final IContentUpdateContext<T> updateContext) {
+		final Collection<?> modelChildren = updateContext.getModelChildren(this.controller);
 
 		final Map<Object, T> added = new HashMap<>();
-		final Map<Object, T> removed = new HashMap<>(contentMap);
+		final Map<Object, T> removed = new HashMap<>(this.contentMap);
 
-		for (Object modelChild : modelChildren) {
+		for (final Object modelChild : modelChildren) {
 			T controller = removed.remove(modelChild);
 			if (controller == null) {
 				controller = updateContext.getController(modelChild, this.controller);
@@ -34,25 +34,25 @@ public class UnorderedContentHandler<T extends IControllerBase> implements ICont
 			}
 		}
 
-		contentMap.keySet().removeAll(removed.keySet());
-		contentMap.putAll(added);
+		this.contentMap.keySet().removeAll(removed.keySet());
+		this.contentMap.putAll(added);
 
-		lastUpdate = new UnorderedContentUpdate<T>(added.values(), removed.values());
+		this.lastUpdate = new UnorderedContentUpdate<>(added.values(), removed.values());
 	}
 
 	@Override
 	public Collection<T> getContent() {
-		return Collections.unmodifiableCollection(contentMap.values());
+		return Collections.unmodifiableCollection(this.contentMap.values());
 	}
 
 	@Override
-	public T getContent(Object model) {
-		return contentMap.get(model);
+	public T getContent(final Object model) {
+		return this.contentMap.get(model);
 	}
 
 	@Override
 	public UnorderedContentUpdate<T> getLastUpdate() {
-		return lastUpdate;
+		return this.lastUpdate;
 	}
 
 }

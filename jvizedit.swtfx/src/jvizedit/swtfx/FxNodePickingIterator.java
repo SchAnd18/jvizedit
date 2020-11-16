@@ -13,8 +13,9 @@ import jvizedit.mvc.IController;
 
 public class FxNodePickingIterator {
 
-	public static <T> Optional<T> findControllerOfType(IController start, Class<T> controllerType, double x, double y) {
-		final List<T> result = new ArrayList<T>(1);
+	public static <T> Optional<T> findControllerOfType(final IController start, final Class<T> controllerType,
+			final double x, final double y) {
+		final List<T> result = new ArrayList<>(1);
 		final FxNodePickingIterator npi = new FxNodePickingIterator();
 		npi.setOnEnterNode((c, n) -> {
 			if (controllerType.isInstance(c)) {
@@ -39,12 +40,12 @@ public class FxNodePickingIterator {
 		return ENavigationCommand.goOn;
 	};
 
-	public FxNodePickingIterator setOnEnterNode(BiFunction<IController, Node, ENavigationCommand> onEnterNode) {
+	public FxNodePickingIterator setOnEnterNode(final BiFunction<IController, Node, ENavigationCommand> onEnterNode) {
 		this.enterNodeFunction = onEnterNode;
 		return this;
 	}
 
-	public FxNodePickingIterator setOnLeaveNode(BiFunction<IController, Node, ENavigationCommand> onLeaveNode) {
+	public FxNodePickingIterator setOnLeaveNode(final BiFunction<IController, Node, ENavigationCommand> onLeaveNode) {
 		this.leaveNodeFunction = onLeaveNode;
 		return this;
 	}
@@ -53,7 +54,7 @@ public class FxNodePickingIterator {
 		final Node node = controller.getViewAsType(Node.class);
 		final Point2D local = node.sceneToLocal(sceneX, sceneY);
 		if (node.getBoundsInLocal().contains(local) && node.contains(local)) {
-			final ENavigationCommand nc = enterNodeFunction.apply(controller, node);
+			final ENavigationCommand nc = this.enterNodeFunction.apply(controller, node);
 			switch (nc) {
 			case quit:
 			case skip:
@@ -65,7 +66,7 @@ public class FxNodePickingIterator {
 				final Parent asParent = (Parent) node;
 				pickNode(controller, asParent, local);
 			}
-			leaveNodeFunction.apply(controller, node);
+			this.leaveNodeFunction.apply(controller, node);
 		}
 	}
 
@@ -77,8 +78,8 @@ public class FxNodePickingIterator {
 			final Point2D local = node.parentToLocal(parentPos);
 			if (node.getBoundsInLocal().contains(local) && node.contains(local)) {
 
-				final IController nodeController = this.getController(node).orElse(controller);
-				final ENavigationCommand ncEnter = enterNodeFunction.apply(nodeController, node);
+				final IController nodeController = getController(node).orElse(controller);
+				final ENavigationCommand ncEnter = this.enterNodeFunction.apply(nodeController, node);
 				switch (ncEnter) {
 				case quit:
 					return ENavigationCommand.quit;
@@ -93,7 +94,7 @@ public class FxNodePickingIterator {
 				case skip:
 				}
 
-				final ENavigationCommand ncLeave = leaveNodeFunction.apply(nodeController, node);
+				final ENavigationCommand ncLeave = this.leaveNodeFunction.apply(nodeController, node);
 				switch (ncLeave) {
 				case quit:
 					return ENavigationCommand.quit;

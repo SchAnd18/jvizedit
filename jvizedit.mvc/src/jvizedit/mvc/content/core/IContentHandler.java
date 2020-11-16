@@ -15,7 +15,7 @@ public interface IContentHandler<U extends IControllerBase> {
 
 	Collection<U> getContent();
 
-	default <T> List<T> getContentControllsAs(Class<T> expectedControlType) {
+	default <T> List<T> getContentControllsAs(final Class<T> expectedControlType) {
 		return getContent().stream().map(IControllerBase::getView).map(v -> {
 			if (!expectedControlType.isInstance(v)) {
 				throw new RuntimeException("Unexpected content type " + v + ". Expected object of type "

@@ -21,7 +21,7 @@ public interface IContentManager {
 
 	IController getController(Object model);
 
-	default <T> Optional<T> getControllerOfType(Class<T> type, Object model) {
+	default <T> Optional<T> getControllerOfType(final Class<T> type, final Object model) {
 		final IController c = getController(model);
 		if (type.isInstance(c)) {
 			return Optional.of(type.cast(c));

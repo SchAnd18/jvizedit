@@ -13,19 +13,19 @@ import jvizedit.mvc.content.IContentChangeListener.ContentChange;
 
 public class EdgesUpdater {
 
-	private ContentManager contentManager;
+	private final ContentManager contentManager;
 
-	public EdgesUpdater(ContentManager contentManager) {
+	public EdgesUpdater(final ContentManager contentManager) {
 		this.contentManager = contentManager;
 	}
 
-	public void update(ContentChange nodeContentChange, Set<IEdgeController> invalidatedEdges) {
-		invalidateEdges(nodeContentChange, contentManager, invalidatedEdges);
+	public void update(final ContentChange nodeContentChange, final Set<IEdgeController> invalidatedEdges) {
+		invalidateEdges(nodeContentChange, this.contentManager, invalidatedEdges);
 		performUpdate(invalidatedEdges);
 	}
 
 	private void invalidateEdges(final ContentChange nodeContentChange, final ContentManager contentManager,
-			Set<IEdgeController> invalidatedEdges) {
+			final Set<IEdgeController> invalidatedEdges) {
 
 		// invalidate all edge controllers that are connected to removed controllers
 		nodeContentChange.getRemovedControllers().stream() //
@@ -41,11 +41,11 @@ public class EdgesUpdater {
 		getRelocatedEdgeControllers(relocatedWithChildren).forEach(invalidatedEdges::add);
 	}
 
-	private Set<IEdgeController> getRelocatedEdgeControllers(Set<IController> controllers) {
+	private Set<IEdgeController> getRelocatedEdgeControllers(final Set<IController> controllers) {
 		final Set<IEdgeController> relocatedControllers = new HashSet<>();
-		for (IController controller : controllers) {
-			final Set<IEdgeController> edgeControllers = contentManager.getConnectedEdgeControllers(controller);
-			for (IEdgeController edgeController : edgeControllers) {
+		for (final IController controller : controllers) {
+			final Set<IEdgeController> edgeControllers = this.contentManager.getConnectedEdgeControllers(controller);
+			for (final IEdgeController edgeController : edgeControllers) {
 				final boolean added = relocatedControllers.add(edgeController);
 				final boolean controllerIsContained = !added;
 				if (controllerIsContained) {
@@ -58,10 +58,10 @@ public class EdgesUpdater {
 		return relocatedControllers;
 	}
 
-	private void performUpdate(Set<IEdgeController> invalidatedEdges) {
-		final Map<Object, IEdgeController> edgeControllerMap = contentManager.getEdgeControllerMap();
+	private void performUpdate(final Set<IEdgeController> invalidatedEdges) {
+		final Map<Object, IEdgeController> edgeControllerMap = this.contentManager.getEdgeControllerMap();
 
-		Collection<?> edges = contentManager.getModelEdges();
+		final Collection<?> edges = this.contentManager.getModelEdges();
 
 		final List<IEdgeController> edgeControllerToRemove = new ArrayList<>();
 
@@ -69,7 +69,7 @@ public class EdgesUpdater {
 		final Set<Object> edgeModelToRemove = new HashSet<>(edgeControllerMap.keySet());
 		edgeModelToRemove.removeAll(edges);
 		edgeModelToRemove.forEach(e -> {
-			final IEdgeController ec = contentManager.getEdgeController(e);
+			final IEdgeController ec = this.contentManager.getEdgeController(e);
 			if (ec != null) {
 				edgeControllerToRemove.add(ec);
 			}
@@ -79,7 +79,7 @@ public class EdgesUpdater {
 		final Set<Object> edgeModelToAdd = new HashSet<>(edges);
 		edgeModelToAdd.removeAll(edgeControllerMap.keySet());
 		edgeModelToAdd.forEach(e -> {
-			final IEdgeController ec = contentManager.createEdgeController(e);
+			final IEdgeController ec = this.contentManager.createEdgeController(e);
 			invalidatedEdges.add(ec);
 		});
 
@@ -87,46 +87,46 @@ public class EdgesUpdater {
 		invalidatedEdges.forEach(ec -> {
 			final Object sourceNode = ec.getSourceNode();
 			final Object targetNode = ec.getTargetNode();
-			final IController newSrcController = contentManager.getController(sourceNode);
-			final IController newTargetController = contentManager.getController(targetNode);
+			final IController newSrcController = this.contentManager.getController(sourceNode);
+			final IController newTargetController = this.contentManager.getController(targetNode);
 
 			final IController currentSrcController = ec.getConnectedSourceController();
 			final IController currentTargetController = ec.getConnectedTargetController();
 
-			if (newSrcController == null || newTargetController == null) {
+			if ((newSrcController == null) || (newTargetController == null)) {
 				edgeControllerToRemove.add(ec);
 			} else {
-				contentManager.updateEdgeControllerConnection(ec, currentSrcController, newSrcController);
-				contentManager.updateEdgeControllerConnection(ec, currentTargetController, newTargetController);
+				this.contentManager.updateEdgeControllerConnection(ec, currentSrcController, newSrcController);
+				this.contentManager.updateEdgeControllerConnection(ec, currentTargetController, newTargetController);
 
 				ec.updateView(newSrcController, newTargetController); // this update can not be collected
 			}
 		});
 
-		for (IEdgeController ec : edgeControllerToRemove) {
+		for (final IEdgeController ec : edgeControllerToRemove) {
 			edgeControllerMap.remove(ec.getModel());
 			final IController currentSrcController = ec.getConnectedSourceController();
 			final IController currentTargetController = ec.getConnectedTargetController();
 			if (currentSrcController != null) {
-				contentManager.updateEdgeControllerConnection(ec, currentSrcController, null);
+				this.contentManager.updateEdgeControllerConnection(ec, currentSrcController, null);
 			}
 			if (currentTargetController != null) {
-				contentManager.updateEdgeControllerConnection(ec, currentTargetController, null);
+				this.contentManager.updateEdgeControllerConnection(ec, currentTargetController, null);
 			}
 			ec.dispose();
 		}
 	}
 
-	private Set<IController> getAllControllers(Collection<IController> controllers) {
+	private Set<IController> getAllControllers(final Collection<IController> controllers) {
 		final List<IController> result = new ArrayList<>();
 		result.addAll(controllers);
 		controllers.forEach(c -> {
 			getAllControllers(c, result);
 		});
-		return new HashSet<IController>(result);
+		return new HashSet<>(result);
 	}
 
-	private void getAllControllers(IController parent, List<IController> result) {
+	private void getAllControllers(final IController parent, final List<IController> result) {
 		result.addAll(parent.getControllerChildren());
 		parent.getControllerChildren().forEach(c -> {
 			getAllControllers(c, result);

@@ -14,18 +14,18 @@ public class ControlState {
 	}
 
 	public String getStateName() {
-		return stateName;
+		return this.stateName;
 	}
 
-	public void addStateTransition(ControlState targetState, final IControlStateEventHandler<?> stateTransition) {
-		transitions.add(0, stateTransition);
-		targetStates.add(0, targetState);
+	public void addStateTransition(final ControlState targetState, final IControlStateEventHandler<?> stateTransition) {
+		this.transitions.add(0, stateTransition);
+		this.targetStates.add(0, targetState);
 	}
 
-	public int handleEvent(Object event) {
-		for (int i = 0; i < transitions.size(); i++) {
-			final IControlStateEventHandler<?> transition = transitions.get(i);
-			final ControlState targetState = targetStates.get(i);
+	public int handleEvent(final Object event) {
+		for (int i = 0; i < this.transitions.size(); i++) {
+			final IControlStateEventHandler<?> transition = this.transitions.get(i);
+			final ControlState targetState = this.targetStates.get(i);
 
 			final boolean match = tryHandleEvent(targetState, transition, event);
 			if (match) {
@@ -46,12 +46,12 @@ public class ControlState {
 		return result;
 	}
 
-	public IControlStateEventHandler<?> getTransition(int index) {
-		return transitions.get(index);
+	public IControlStateEventHandler<?> getTransition(final int index) {
+		return this.transitions.get(index);
 	}
 
-	public ControlState getState(int index) {
-		return targetStates.get(index);
+	public ControlState getState(final int index) {
+		return this.targetStates.get(index);
 	}
 
 }

@@ -13,17 +13,18 @@ import jvizedit.swtfx.sample.model.ShapesRoot;
 
 public class ShapesRootController extends AbstractObservingController<ShapesRoot> {
 
-	private final UnorderedContentHandler<IController> contentHandler = new UnorderedContentHandler<IController>(this);
+	private final UnorderedContentHandler<IController> contentHandler = new UnorderedContentHandler<>(this);
 	private boolean isDisposed = false;
 
 	private final Group group;
 
-	public ShapesRootController(IContentManager contentManager, IController parent, ShapesRoot shapesRoot) {
+	public ShapesRootController(final IContentManager contentManager, final IController parent,
+			final ShapesRoot shapesRoot) {
 		super(contentManager, parent, shapesRoot);
 
-		group = new Group();
-		group.setUserData(shapesRoot);
-		;
+		this.group = new Group();
+		this.group.setUserData(shapesRoot);
+
 	}
 
 	@Override
@@ -33,15 +34,15 @@ public class ShapesRootController extends AbstractObservingController<ShapesRoot
 
 	@Override
 	public void updateView() {
-		final List<Node> nodes = contentHandler.getContentControllsAs(Node.class);
-		group.getChildren().setAll(nodes);
+		final List<Node> nodes = this.contentHandler.getContentControllsAs(Node.class);
+		this.group.getChildren().setAll(nodes);
 
 		/*
 		 * Alternative: final UnorderedContentUpdate<IController> update =
 		 * contentHandler.getLastUpdate(); if(update != null) { final Collection<Node>
 		 * addedElements = update.getAddedUiElementsAsType(Node.class);
 		 * group.getChildren().addAll(addedElements);
-		 * 
+		 *
 		 * final Collection<Node> removedElements =
 		 * update.getRemovedUiElementsAsType(Node.class);
 		 * group.getChildren().removeAll(removedElements); }
@@ -49,13 +50,13 @@ public class ShapesRootController extends AbstractObservingController<ShapesRoot
 	}
 
 	@Override
-	public IContentHandler<IController> getConentHandler() {
-		return contentHandler;
+	public IContentHandler<IController> getContentHandler() {
+		return this.contentHandler;
 	}
 
 	@Override
 	public boolean isDisposed() {
-		return isDisposed;
+		return this.isDisposed;
 	}
 
 	@Override
@@ -65,7 +66,7 @@ public class ShapesRootController extends AbstractObservingController<ShapesRoot
 
 	@Override
 	public Object getView() {
-		return group;
+		return this.group;
 	}
 
 }

@@ -12,11 +12,11 @@ public class LocalToSceneObserver {
 	private final Node observedNode;
 	private boolean enabled = false;
 
-	public LocalToSceneObserver(Node observedNode) {
-		il1 = (a, b, c) -> {
+	public LocalToSceneObserver(final Node observedNode) {
+		this.il1 = (a, b, c) -> {
 			update();
 		};
-		il2 = (observable, oldValue, newvalue) -> {
+		this.il2 = (observable, oldValue, newvalue) -> {
 			update();
 		};
 		this.observedNode = observedNode;
@@ -24,29 +24,29 @@ public class LocalToSceneObserver {
 	}
 
 	public void enable() {
-		if (enabled) {
+		if (this.enabled) {
 			return;
 		}
-		enabled = true;
-		observedNode.localToSceneTransformProperty().addListener(il2);
-		observedNode.getLocalToSceneTransform().onTransformChangedProperty().addListener(il1);
+		this.enabled = true;
+		this.observedNode.localToSceneTransformProperty().addListener(this.il2);
+		this.observedNode.getLocalToSceneTransform().onTransformChangedProperty().addListener(this.il1);
 	}
 
 	public void disable() {
-		if (!enabled) {
+		if (!this.enabled) {
 			return;
 		}
-		enabled = false;
-		observedNode.localToSceneTransformProperty().removeListener(il2);
-		observedNode.getLocalToSceneTransform().onTransformChangedProperty().removeListener(il1);
+		this.enabled = false;
+		this.observedNode.localToSceneTransformProperty().removeListener(this.il2);
+		this.observedNode.getLocalToSceneTransform().onTransformChangedProperty().removeListener(this.il1);
 	}
 
 	public boolean isEnabled() {
-		return enabled;
+		return this.enabled;
 	}
 
 	public Node getObservedNode() {
-		return observedNode;
+		return this.observedNode;
 	}
 
 	public void update() {

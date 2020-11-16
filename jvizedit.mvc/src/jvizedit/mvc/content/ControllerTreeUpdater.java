@@ -18,7 +18,7 @@ import jvizedit.mvc.content.core.IContentUpdate;
 public class ControllerTreeUpdater {
 
 	public ContentChange update(final Set<IController> initiallyInvalidatedControllers,
-			IContentManager contentManager) {
+			final IContentManager contentManager) {
 
 		final Map<IController, List<IController>> reusedControllerToNewParentsMap = new HashMap<>();
 		final Map<IController, IContentUpdate<IController>> contentUpdates = new HashMap<>();
@@ -27,7 +27,7 @@ public class ControllerTreeUpdater {
 		Set<IController> invalidatedControllers = initiallyInvalidatedControllers;
 		while (!invalidatedControllers.isEmpty()) {
 			final Set<IController> furtherInvalidatedControllers = new HashSet<>();
-			for (IController invController : invalidatedControllers) {
+			for (final IController invController : invalidatedControllers) {
 
 				final ControllerUpdateContext context = new ControllerUpdateContext(contentManager);
 				createContentUpdate(invController, updateRunnableMap, contentUpdates, context);
@@ -36,7 +36,7 @@ public class ControllerTreeUpdater {
 				furtherInvalidatedControllers.addAll(createdControllers);
 
 				final Set<IController> reusedControllers = context.getReusedControllers();
-				for (IController reusedController : reusedControllers) {
+				for (final IController reusedController : reusedControllers) {
 					final IController parent = reusedController.getParent();
 					if (parent != null) {
 						furtherInvalidatedControllers.add(parent);
@@ -67,12 +67,12 @@ public class ControllerTreeUpdater {
 		// reusedControllerToParentMap will contain only the parents that are not
 		// removed
 		final List<IController> allRemoved = new ArrayList<>(actuallyRemoved);
-		for (IController removedParent : actuallyRemoved) {
+		for (final IController removedParent : actuallyRemoved) {
 			collectAllRemovedChildren(removedParent, reusedControllerToParentMap, allRemoved);
 		}
 
 		// validate if some reused controller still has more than one parent
-		for (Entry<IController, Set<IController>> e : reusedControllerToParentMap.entrySet()) {
+		for (final Entry<IController, Set<IController>> e : reusedControllerToParentMap.entrySet()) {
 			final IController child = e.getKey();
 			final Set<IController> parents = e.getValue();
 			if (parents.size() > 1) {
@@ -124,7 +124,8 @@ public class ControllerTreeUpdater {
 	}
 
 	private void collectAllRemovedChildren(final IController parentRemovedController,
-			final Map<IController, Set<IController>> reusedControllerToParentMap, List<IController> allRemovedResult) {
+			final Map<IController, Set<IController>> reusedControllerToParentMap,
+			final List<IController> allRemovedResult) {
 		final IContentHandler<IController> contentHandler = parentRemovedController.getContentHandler();
 		if (contentHandler == null) {
 			return;
@@ -149,10 +150,10 @@ public class ControllerTreeUpdater {
 	}
 
 	private Map<IController, Set<IController>> createControllerToParentMap(
-			Map<IController, List<IController>> reusedControllerToNewParentsMap,
+			final Map<IController, List<IController>> reusedControllerToNewParentsMap,
 			final Map<IController, IContentUpdate<IController>> contentUpdates) {
 		final Map<IController, Set<IController>> result = new HashMap<>();
-		for (Entry<IController, List<IController>> e : reusedControllerToNewParentsMap.entrySet()) {
+		for (final Entry<IController, List<IController>> e : reusedControllerToNewParentsMap.entrySet()) {
 			final Set<IController> parents = new HashSet<>(e.getValue());
 			final IController c = e.getKey();
 			final IController originalParent = c.getParent();

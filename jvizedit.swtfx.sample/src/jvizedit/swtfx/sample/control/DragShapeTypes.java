@@ -26,7 +26,7 @@ public class DragShapeTypes implements IDragDropListener {
 	}
 
 	@Override
-	public void dragEvent(IDragEventInfo eventInfo) {
+	public void dragEvent(final IDragEventInfo eventInfo) {
 		switch (eventInfo.getType()) {
 		case continueDrag:
 			eventInfo.setAcceptedTransfers(EDragDropTransfer.move);
@@ -50,8 +50,8 @@ public class DragShapeTypes implements IDragDropListener {
 			final ShapeObject shapeObject = new ShapeObject();
 			shapeObject.setX(pos.getX());
 			shapeObject.setY(pos.getY());
-			shapeObject.setWidth(20 + random.nextDouble() * 100);
-			shapeObject.setHeight(20 + random.nextDouble() * 100);
+			shapeObject.setWidth(20 + (random.nextDouble() * 100));
+			shapeObject.setHeight(20 + (random.nextDouble() * 100));
 
 			shapeObject.setShapeType(shapeType);
 

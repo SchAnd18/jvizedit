@@ -10,7 +10,7 @@ public interface IControllerBase {
 
 	Object getView();
 
-	default <T> T getViewAsType(Class<T> expectedType) {
+	default <T> T getViewAsType(final Class<T> expectedType) {
 		final Object view = getView();
 		if (view == null) {
 			throw new IllegalStateException("View is not allowed to be null.");

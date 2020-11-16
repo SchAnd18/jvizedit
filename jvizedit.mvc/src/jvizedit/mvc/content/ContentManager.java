@@ -38,36 +38,36 @@ public class ContentManager implements IContentManager {
 	private Supplier<Collection<?>> modelEdgeSupplier;
 
 	@Override
-	public void addContentChangeListener(IContentChangeListener listener) {
+	public void addContentChangeListener(final IContentChangeListener listener) {
 		this.contentChangeListeners.add(listener);
 	}
 
 	@Override
-	public void removeContentChangeListener(IContentChangeListener listener) {
+	public void removeContentChangeListener(final IContentChangeListener listener) {
 		this.contentChangeListeners.remove(listener);
 	}
 
 	@Override
-	public void addControllerFactory(IControllerFactory controllerFactory) {
+	public void addControllerFactory(final IControllerFactory controllerFactory) {
 		this.controlerFactories.add(controllerFactory);
 	}
 
 	@Override
-	public IController getController(Object model) {
-		return modelControllerMap.get(model);
+	public IController getController(final Object model) {
+		return this.modelControllerMap.get(model);
 	}
 
 	@Override
-	public IEdgeController getEdgeController(Object model) {
-		return edgeControllerMap.get(model);
+	public IEdgeController getEdgeController(final Object model) {
+		return this.edgeControllerMap.get(model);
 	}
 
 	@Override
-	public void invalidateController(IControllerBase controller) {
+	public void invalidateController(final IControllerBase controller) {
 		if (controller instanceof IEdgeController) {
-			invalidatedEdgeControllers.add((IEdgeController) controller);
+			this.invalidatedEdgeControllers.add((IEdgeController) controller);
 		} else if (controller instanceof IController) {
-			invalidatedControllers.add((IController) controller);
+			this.invalidatedControllers.add((IController) controller);
 		} else {
 			throw new IllegalStateException("Unknown type of controller " + controller);
 		}
@@ -83,18 +83,18 @@ public class ContentManager implements IContentManager {
 		this.invalidatedEdgeControllers.clear();
 
 		// root node refresh
-		if (rootUpdateRequired) {
-			final IController oldRootController = rootController;
-			if (rootController != null) {
+		if (this.rootUpdateRequired) {
+			final IController oldRootController = this.rootController;
+			if (this.rootController != null) {
 				this.rootController = null;
 			}
-			if (newRootObject != null) {
-				this.rootController = updateContext.getController(newRootObject, null);
+			if (this.newRootObject != null) {
+				this.rootController = updateContext.getController(this.newRootObject, null);
 				invalidatedControllers.add(this.rootController);
-				newRootObject = null;
+				this.newRootObject = null;
 			}
-			rootUpdateRequired = false;
-			contentChangeListeners.forEach(l -> l.onRootChange(oldRootController, this.rootController));
+			this.rootUpdateRequired = false;
+			this.contentChangeListeners.forEach(l -> l.onRootChange(oldRootController, this.rootController));
 		}
 
 		// node tree refresh
@@ -105,29 +105,29 @@ public class ContentManager implements IContentManager {
 		final EdgesUpdater eu = new EdgesUpdater(this);
 		eu.update(cc, invalidatedEdgeControllers);
 
-		for (IController o : cc.getRemovedControllers()) {
-			final IController removedController = modelControllerMap.remove(o.getModel());
-			modelControllerToEdgeMap.remove(removedController);
+		for (final IController o : cc.getRemovedControllers()) {
+			final IController removedController = this.modelControllerMap.remove(o.getModel());
+			this.modelControllerToEdgeMap.remove(removedController);
 		}
-		contentChangeListeners.forEach(l -> l.onContentChange(cc));
+		this.contentChangeListeners.forEach(l -> l.onContentChange(cc));
 	}
 
 	@Override
-	public void setRoot(Object root) {
+	public void setRoot(final Object root) {
 		this.newRootObject = root;
 		this.rootUpdateRequired = true;
 	}
 
 	@Override
-	public void setModelEdgeSupplier(Supplier<Collection<?>> edgeSupplier) {
+	public void setModelEdgeSupplier(final Supplier<Collection<?>> edgeSupplier) {
 		this.modelEdgeSupplier = edgeSupplier;
 	}
 
 	protected Collection<?> getModelEdges() {
-		if (modelEdgeSupplier == null) {
+		if (this.modelEdgeSupplier == null) {
 			return Collections.emptyList();
 		}
-		final Collection<?> result = modelEdgeSupplier.get();
+		final Collection<?> result = this.modelEdgeSupplier.get();
 		if (result == null) {
 			return Collections.emptyList();
 		}
@@ -136,7 +136,7 @@ public class ContentManager implements IContentManager {
 
 	@Override
 	public IController createController(final Object model, final IController parent) {
-		for (IControllerFactory factory : controlerFactories) {
+		for (final IControllerFactory factory : this.controlerFactories) {
 			final IController c = factory.createController(model, this, parent);
 			if (c != null) {
 				final IController oldController = this.modelControllerMap.put(model, c);
@@ -150,8 +150,8 @@ public class ContentManager implements IContentManager {
 	}
 
 	@Override
-	public IEdgeController createEdgeController(Object model) {
-		for (IControllerFactory factory : controlerFactories) {
+	public IEdgeController createEdgeController(final Object model) {
+		for (final IControllerFactory factory : this.controlerFactories) {
 			final IEdgeController c = factory.createEdgeController(model, this);
 			if (c != null) {
 				final IEdgeController oldController = this.edgeControllerMap.put(model, c);
@@ -175,7 +175,7 @@ public class ContentManager implements IContentManager {
 	}
 
 	@Override
-	public <T> Collection<T> getControllersOfType(Class<T> type) {
+	public <T> Collection<T> getControllersOfType(final Class<T> type) {
 		final List<T> result = this.modelControllerMap.values().stream().filter(type::isInstance) //
 				.map(type::cast) //
 				.collect(Collectors.toList());
@@ -183,13 +183,14 @@ public class ContentManager implements IContentManager {
 	}
 
 	@Override
-	public Set<IEdgeController> getConnectedEdgeControllers(IController controller) {
-		final Set<IEdgeController> result = modelControllerToEdgeMap.getOrDefault(controller, Collections.emptySet());
+	public Set<IEdgeController> getConnectedEdgeControllers(final IController controller) {
+		final Set<IEdgeController> result = this.modelControllerToEdgeMap.getOrDefault(controller,
+				Collections.emptySet());
 		return Collections.unmodifiableSet(result);
 	}
 
-	protected void updateEdgeControllerConnection(IEdgeController edgeController, IController oldConnected,
-			IController newConnected) {
+	protected void updateEdgeControllerConnection(final IEdgeController edgeController, final IController oldConnected,
+			final IController newConnected) {
 		if (Objects.equals(oldConnected, newConnected)) {
 			return;
 		}
@@ -201,16 +202,16 @@ public class ContentManager implements IContentManager {
 		}
 	}
 
-	private Set<IEdgeController> getConnectedEdgeControllersModifieable(IController controller) {
-		final boolean isKnownController = modelControllerMap.containsKey(controller.getModel());
+	private Set<IEdgeController> getConnectedEdgeControllersModifieable(final IController controller) {
+		final boolean isKnownController = this.modelControllerMap.containsKey(controller.getModel());
 		if (!isKnownController) {
 			throw new IllegalStateException("Controller is not managed by this content manager " + controller + ".");
 		}
-		return modelControllerToEdgeMap.computeIfAbsent(controller, __ -> new HashSet<>());
+		return this.modelControllerToEdgeMap.computeIfAbsent(controller, __ -> new HashSet<>());
 	}
 
 	// TODO: remove this method
 	protected Map<Object, IEdgeController> getEdgeControllerMap() {
-		return edgeControllerMap;
+		return this.edgeControllerMap;
 	}
 }

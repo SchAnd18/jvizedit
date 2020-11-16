@@ -10,7 +10,8 @@ import jvizedit.swtfx.sample.model.ShapesRoot;
 public class ShapeModelControllerFactory implements IControllerFactory {
 
 	@Override
-	public IController createController(Object model, IContentManager contentManager, IController parent) {
+	public IController createController(final Object model, final IContentManager contentManager,
+			final IController parent) {
 		if (model instanceof ShapesRoot) {
 			final ShapesRoot sr = (ShapesRoot) model;
 			return new ShapesRootController(contentManager, parent, sr);
@@ -23,7 +24,7 @@ public class ShapeModelControllerFactory implements IControllerFactory {
 	}
 
 	@Override
-	public IEdgeController createEdgeController(Object model, IContentManager contentManager) {
+	public IEdgeController createEdgeController(final Object model, final IContentManager contentManager) {
 		return null;
 	}
 

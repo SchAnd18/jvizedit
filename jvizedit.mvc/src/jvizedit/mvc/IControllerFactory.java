@@ -6,7 +6,7 @@ public interface IControllerFactory {
 
 	/**
 	 * Create a new controller
-	 * 
+	 *
 	 * @param model          The model that shall be managed by the controller
 	 * @param contentManager The content manager context that manages the current
 	 *                       controller tree

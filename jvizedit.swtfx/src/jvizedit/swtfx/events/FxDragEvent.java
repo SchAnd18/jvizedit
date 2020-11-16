@@ -27,35 +27,35 @@ public class FxDragEvent implements IDragEvent {
 			}
 		};
 
-		final FilteredEventHandler<DragEvent> filtered = new FilteredEventHandler<DragEvent>(handler);
+		final FilteredEventHandler<DragEvent> filtered = new FilteredEventHandler<>(handler);
 		scene.addEventFilter(DragEvent.ANY, filtered);
 		return filtered;
 	}
 
-	private DragEvent wrappedDragEvent;
+	private final DragEvent wrappedDragEvent;
 
-	public FxDragEvent(DragEvent dragEvent) {
+	public FxDragEvent(final DragEvent dragEvent) {
 		this.wrappedDragEvent = dragEvent;
 	}
 
 	@Override
 	public DragEvent getRealEvent() {
-		return wrappedDragEvent;
+		return this.wrappedDragEvent;
 	}
 
 	@Override
 	public double getX() {
-		return wrappedDragEvent.getSceneX();
+		return this.wrappedDragEvent.getSceneX();
 	}
 
 	@Override
 	public double getY() {
-		return wrappedDragEvent.getSceneY();
+		return this.wrappedDragEvent.getSceneY();
 	}
 
 	@Override
 	public EDragDropTransfer getTransferMode() {
-		final TransferMode mode = wrappedDragEvent.getTransferMode();
+		final TransferMode mode = this.wrappedDragEvent.getTransferMode();
 		switch (mode) {
 		case COPY:
 			return EDragDropTransfer.copy;
@@ -68,7 +68,7 @@ public class FxDragEvent implements IDragEvent {
 	}
 
 	@Override
-	public void acceptTransferModes(EDragDropTransfer... transferModes) {
+	public void acceptTransferModes(final EDragDropTransfer... transferModes) {
 		final List<TransferMode> modes = Arrays.asList(transferModes).stream() //
 				.filter(Objects::nonNull) //
 				.filter(m -> m != EDragDropTransfer.pseudo) //
@@ -85,26 +85,26 @@ public class FxDragEvent implements IDragEvent {
 					}
 				}).collect(Collectors.toList());
 		final TransferMode[] modeArray = modes.toArray(new TransferMode[0]);
-		wrappedDragEvent.acceptTransferModes(modeArray);
+		this.wrappedDragEvent.acceptTransferModes(modeArray);
 	}
 
 	@Override
 	public boolean isAccepted() {
-		return wrappedDragEvent.isAccepted();
+		return this.wrappedDragEvent.isAccepted();
 	}
 
 	@Override
 	public DragEventType getType() {
-		EventType<?> type = wrappedDragEvent.getEventType();
+		final EventType<?> type = this.wrappedDragEvent.getEventType();
 		if (type.equals(DragEvent.DRAG_ENTERED) || type.equals(DragEvent.DRAG_ENTERED_TARGET)) {
-			if (wrappedDragEvent.getTarget() instanceof Scene) {
+			if (this.wrappedDragEvent.getTarget() instanceof Scene) {
 				return DragEventType.dragEnter;
 			} else {
 				return DragEventType.dragOver;
 			}
 		}
 		if (type.equals(DragEvent.DRAG_EXITED) || type.equals(DragEvent.DRAG_EXITED_TARGET)) {
-			if (wrappedDragEvent.getTarget() instanceof Scene) {
+			if (this.wrappedDragEvent.getTarget() instanceof Scene) {
 				return DragEventType.dragExit;
 			} else {
 				return DragEventType.dragOver;

@@ -15,7 +15,7 @@ import jvizedit.swtfx.sample.viewer.ShapeViewerControl;
 
 public class SampleApplication {
 
-	public static void main(String... args) {
+	public static void main(final String... args) {
 
 		final Display display = new Display();
 		final Shell shell = new Shell(display);
@@ -47,12 +47,12 @@ public class SampleApplication {
 		return root;
 	}
 
-	private static ShapeObject createRandomShapeObject(final Random random, String text) {
+	private static ShapeObject createRandomShapeObject(final Random random, final String text) {
 		final ShapeObject result = new ShapeObject();
 		result.setX(random.nextDouble() * 800);
 		result.setY(random.nextDouble() * 600);
-		result.setWidth(20 + random.nextDouble() * 100);
-		result.setHeight(20 + random.nextDouble() * 100);
+		result.setWidth(20 + (random.nextDouble() * 100));
+		result.setHeight(20 + (random.nextDouble() * 100));
 
 		final ShapeType st = ShapeType.values()[random.nextInt(ShapeType.values().length)];
 		result.setShapeType(st);

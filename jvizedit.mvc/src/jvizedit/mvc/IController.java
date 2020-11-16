@@ -27,7 +27,7 @@ public interface IController extends IControllerBase {
 
 	default boolean hasControllerChildren() {
 		final IContentHandler<IController> ch = getContentHandler();
-		return ch != null && ch.getContent().isEmpty() == false;
+		return (ch != null) && (ch.getContent().isEmpty() == false);
 	}
 
 }
