@@ -39,7 +39,7 @@ public class ControlStateMachine {
 		return currentState;
 	}
 
-	public void handleEvent(Object event) {
+	public boolean handleEvent(Object event) {
 		final ControlState oldState = currentState;
 		final int index = currentState.handleEvent(event); // TODO: return a structure, not an index
 		if (index >= 0) {
@@ -47,6 +47,9 @@ public class ControlStateMachine {
 			final IControlStateEventHandler<?> transition = currentState.getTransition(index);
 			currentState = newState;
 			notifyUpdate(oldState, transition, event);
+			return true;
+		} else {
+			return false;
 		}
 	}
 

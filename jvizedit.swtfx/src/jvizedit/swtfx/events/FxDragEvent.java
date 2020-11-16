@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.event.EventType;
 import javafx.scene.Scene;
@@ -17,16 +16,20 @@ import jvizedit.control.dragdrop.EDragDropTransfer;
 
 public class FxDragEvent implements IDragEvent {
 
-	public static EventHandler<Event> addDragEventFilter(final Scene scene, final ControlStateMachine cstm) {
-		final EventHandler<Event> handler = event -> {
-			if (event instanceof DragEvent) {
-				final DragEvent dragEvent = (DragEvent) event;
-				final FxDragEvent fxKeyEvent = new FxDragEvent(dragEvent);
-				cstm.handleEvent(fxKeyEvent);
+	public static FilteredEventHandler<DragEvent> addDragEventFilter(final Scene scene,
+			final ControlStateMachine cstm) {
+		final EventHandler<DragEvent> handler = event -> {
+			final DragEvent dragEvent = event;
+			final FxDragEvent fxKeyEvent = new FxDragEvent(dragEvent);
+			final boolean handled = cstm.handleEvent(fxKeyEvent);
+			if (handled) {
+				event.consume();
 			}
 		};
-		scene.addEventFilter(EventType.ROOT, handler);
-		return handler;
+
+		final FilteredEventHandler<DragEvent> filtered = new FilteredEventHandler<DragEvent>(handler);
+		scene.addEventFilter(DragEvent.ANY, filtered);
+		return filtered;
 	}
 
 	private DragEvent wrappedDragEvent;

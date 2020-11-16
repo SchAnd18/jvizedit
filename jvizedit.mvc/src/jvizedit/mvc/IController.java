@@ -11,15 +11,14 @@ public interface IController extends IControllerBase {
 
 	void updateView();
 
-	IContentHandler<IController> getConentHandler();
+	IContentHandler<IController> getContentHandler();
 
 	IController getParent();
 
-	// TODO: remove this method
 	void relocateToNewParent(IController newParent);
 
 	default Collection<IController> getControllerChildren() {
-		final IContentHandler<IController> ch = getConentHandler();
+		final IContentHandler<IController> ch = getContentHandler();
 		if (ch == null) {
 			return Collections.emptyList();
 		}
@@ -27,7 +26,7 @@ public interface IController extends IControllerBase {
 	}
 
 	default boolean hasControllerChildren() {
-		final IContentHandler<IController> ch = getConentHandler();
+		final IContentHandler<IController> ch = getContentHandler();
 		return ch != null && ch.getContent().isEmpty() == false;
 	}
 

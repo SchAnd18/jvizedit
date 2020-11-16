@@ -70,19 +70,19 @@ public class ViewerSelection implements IContentChangeListener {
 		return selectedObjects.contains(model);
 	}
 
-	public Set<ISelectableController> getSelectedControllers() {
+	public List<ISelectableController> getSelectedControllers() {
 		return selectedObjects.stream().map(modelContent::getController).filter(ISelectableController.class::isInstance)
-				.map(ISelectableController.class::cast).collect(Collectors.toSet());
+				.map(ISelectableController.class::cast).collect(Collectors.toList());
 	}
 
-	public <T> Set<T> getSelectedControllers(Class<T> controllerType) {
+	public <T> List<T> getSelectedControllers(Class<T> controllerType) {
 		return selectedObjects.stream().map(modelContent::getController).filter(controllerType::isInstance)
-				.map(controllerType::cast).collect(Collectors.toSet());
+				.map(controllerType::cast).collect(Collectors.toList());
 	}
 
-	public Set<Object> getSelectedObjects() {
+	public List<Object> getSelectedObjects() {
 		return this.getSelectedControllers(ISelectableController.class).stream().map(IControllerBase::getModel)
-				.collect(Collectors.toSet());
+				.collect(Collectors.toList());
 	}
 
 	private void notifySelectionChange() {

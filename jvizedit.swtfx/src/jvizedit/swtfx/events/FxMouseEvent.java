@@ -1,8 +1,6 @@
 package jvizedit.swtfx.events;
 
-import javafx.event.Event;
 import javafx.event.EventHandler;
-import javafx.event.EventType;
 import javafx.scene.Scene;
 import javafx.scene.input.MouseEvent;
 import jvizedit.control.core.ControlStateMachine;
@@ -10,17 +8,19 @@ import jvizedit.control.core.events.IMouseEvent;
 
 public class FxMouseEvent implements IMouseEvent {
 
-	public static EventHandler<Event> addMouseEventFilter(final Scene scene, final ControlStateMachine cstm) {
-		final EventHandler<Event> handler = event -> {
-			if (event instanceof MouseEvent) {
-				final MouseEvent mouseEvent = (MouseEvent) event;
-				final FxMouseEvent fxKeyEvent = new FxMouseEvent(mouseEvent);
-				cstm.handleEvent(fxKeyEvent);
+	public static FilteredEventHandler<MouseEvent> addMouseEventFilter(final Scene scene,
+			final ControlStateMachine cstm) {
+		final EventHandler<MouseEvent> handler = event -> {
+			final MouseEvent mouseEvent = event;
+			final FxMouseEvent fxKeyEvent = new FxMouseEvent(mouseEvent);
+			final boolean handled = cstm.handleEvent(fxKeyEvent);
+			if (handled) {
+				event.consume();
 			}
-
 		};
-		scene.addEventFilter(EventType.ROOT, handler);
-		return handler;
+		final FilteredEventHandler<MouseEvent> filtered = new FilteredEventHandler<MouseEvent>(handler);
+		scene.addEventFilter(MouseEvent.ANY, filtered);
+		return filtered;
 	}
 
 	private final MouseEvent wrappedMouseEvent;
@@ -66,6 +66,16 @@ public class FxMouseEvent implements IMouseEvent {
 	}
 
 	@Override
+	public boolean isShiftDown() {
+		return wrappedMouseEvent.isShiftDown();
+	}
+
+	@Override
+	public boolean isAltDown() {
+		return wrappedMouseEvent.isAltDown();
+	}
+
+	@Override
 	public MouseButton getButton() {
 		switch (wrappedMouseEvent.getButton()) {
 		case NONE:
@@ -79,5 +89,4 @@ public class FxMouseEvent implements IMouseEvent {
 			return MouseButton.UNKNOWN;
 		}
 	}
-
 }

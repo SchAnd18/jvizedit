@@ -125,7 +125,7 @@ public class ControllerTreeUpdater {
 
 	private void collectAllRemovedChildren(final IController parentRemovedController,
 			final Map<IController, Set<IController>> reusedControllerToParentMap, List<IController> allRemovedResult) {
-		final IContentHandler<IController> contentHandler = parentRemovedController.getConentHandler();
+		final IContentHandler<IController> contentHandler = parentRemovedController.getContentHandler();
 		if (contentHandler == null) {
 			return;
 		}
@@ -168,7 +168,7 @@ public class ControllerTreeUpdater {
 
 	private void createContentUpdate(final IController controller, final Map<IController, Runnable> updateRunnableMap,
 			final Map<IController, IContentUpdate<IController>> contentUpdates, final ControllerUpdateContext context) {
-		final IContentHandler<IController> contentHandler = controller.getConentHandler();
+		final IContentHandler<IController> contentHandler = controller.getContentHandler();
 		final IContentUpdate<IController> update;
 		if (contentHandler == null) {
 			update = null;

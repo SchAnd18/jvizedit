@@ -14,6 +14,10 @@ public interface IMouseEvent extends IWrappedEvent {
 
 	boolean isControlDown();
 
+	boolean isShiftDown();
+
+	boolean isAltDown();
+
 	MouseButton getButton();
 
 	public enum MouseButton {

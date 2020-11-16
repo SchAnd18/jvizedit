@@ -1,8 +1,6 @@
 package jvizedit.swtfx.events;
 
-import javafx.event.Event;
 import javafx.event.EventHandler;
-import javafx.event.EventType;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -11,16 +9,18 @@ import jvizedit.control.core.events.IKeyEvent;
 
 public class FxKeyEvent implements IKeyEvent {
 
-	public static EventHandler<Event> addKeyEventFilter(final Scene scene, final ControlStateMachine cstm) {
-		final EventHandler<Event> handler = event -> {
-			if (event instanceof KeyEvent) {
-				final KeyEvent keyEvent = (KeyEvent) event;
-				final FxKeyEvent fxKeyEvent = new FxKeyEvent(keyEvent);
-				cstm.handleEvent(fxKeyEvent);
+	public static FilteredEventHandler<KeyEvent> addKeyEventFilter(final Scene scene, final ControlStateMachine cstm) {
+		final EventHandler<KeyEvent> handler = event -> {
+			final KeyEvent keyEvent = event;
+			final FxKeyEvent fxKeyEvent = new FxKeyEvent(keyEvent);
+			final boolean handled = cstm.handleEvent(fxKeyEvent);
+			if (handled) {
+				event.consume();
 			}
 		};
-		scene.addEventFilter(EventType.ROOT, handler);
-		return handler;
+		final FilteredEventHandler<KeyEvent> filtered = new FilteredEventHandler<KeyEvent>(handler);
+		scene.addEventFilter(KeyEvent.ANY, filtered);
+		return filtered;
 	}
 
 	private final KeyEvent fxEvent;
